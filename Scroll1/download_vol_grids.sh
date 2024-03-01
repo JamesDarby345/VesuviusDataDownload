@@ -39,5 +39,5 @@ else
     
     # Use rclone to download the file
     rclone copy ":http:${REMOTE_PATH}" "${LOCAL_PATH}" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
+  done
 fi
-done
