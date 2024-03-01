@@ -1,0 +1,7 @@
+config.env
+downloader_gui.py
+
+#ignore downloaded data
+**/volume_grids/
+**/segments/
+**/volumes/
