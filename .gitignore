@@ -1,5 +1,6 @@
 config.env
 downloader_gui.py
+.DS_Store
 
 #ignore downloaded data
 **/volume_grids/
