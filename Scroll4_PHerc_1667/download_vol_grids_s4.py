@@ -46,14 +46,12 @@ def main():
     password = get_env_variable("PASSWORD", "password? ")
 
     """
-    No mask csv file for Scroll 2 is open source as of march 2nd 2024
+    No mask csv file for Scroll 4 PHerc 1667 is open source as of march 2nd 2024
     """
     # masked = input("Would you like to download just the useful (masked) cubes or all the cubes? (masked/all): ")
-    #TODO: add 88keV download option?
-    #Unlikely too many people will want to use that though
-    
-    base_url = "/full-scrolls/Scroll2.volpkg/volume_grids/20230210143520/"
-    target_dir = "./volume_grids/20230210143520/"
+
+    base_url = "/full-scrolls/PHerc1667.volpkg/volume_grids/20231107190228/"
+    target_dir = "./volume_grids/20231107190228/"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
@@ -67,7 +65,7 @@ def main():
     #     #change the path here if you want to use a different mask.csv file
     #     #code assumes the yxz coordinates in the .csv are the grids you want to download
 
-    #     #No mask csv file for Scroll 2 is open source as of march 2nd 2024
+    #     #No mask csv file for Scroll 4 is open source as of march 2nd 2024
     #     #mask_csv_file = "../Volume_Cube_Masks/scroll_1_54_mask.csv"
     #     files = []
 

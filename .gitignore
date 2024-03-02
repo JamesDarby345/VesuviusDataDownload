@@ -8,3 +8,5 @@ downloader_gui.py
 **/segments/
 **/volumes/
 **/masked_volumes/
+**/surface_volume/
+**/fragment_data/
