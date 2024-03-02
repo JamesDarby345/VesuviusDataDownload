@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+from tempfile import NamedTemporaryFile
 
 def strip_quotes(value):
     return value.replace("'", "").replace('"', "")
@@ -18,20 +19,40 @@ def get_env_variable(name, prompt):
         value = input(prompt)
     return value
 
-def download_range_or_file(start, end, base_url, target_dir, username, password):
+#faster to download individual files like this if there are only a few
+def download_range_or_file(start, end, base_url, target_dir, username, password, threads):
     if start == end:
         filename = f"{start:05}.tif"
         print(f"Downloading {filename}...")
         subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                 "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
-                "--multi-thread-streams=8", "--transfers=8"], check=True)
+                f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
     else:
         for i in range(start, end + 1):
             filename = f"{i:05}.tif"
             subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
-                            "--multi-thread-streams=8", "--transfers=8"], check=True)
+                            f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
+
+# uses --files-from flag to download a list of files, 
+# faster & better reporting than many individual file downloads <- unsure exactly where the threshold is
+def download_range(remote_path, target_dir, file_list, username, password, threads):
+    # Create a temporary file to list the files to download
+    with NamedTemporaryFile(mode='w', delete=False) as temp_file:
+        for file in file_list:
+            temp_file.write(f"{file}\n")
+        temp_file_path = temp_file.name
+
+    # Use the temporary file with the --files-from option in rclone
+    # to leverage multi threaded downloads and better reporting than individual file downloads
+    try:
+        subprocess.run(["rclone", "copy", f":http:{remote_path}", f"{target_dir}",
+                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", 
+                        "--files-from", temp_file_path, "--progress",
+                        f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
+    finally:
+        os.remove(temp_file_path)
 
 def main():
     load_env_variables()
@@ -48,16 +69,38 @@ def main():
     base_url = "/full-scrolls/Scroll1.volpkg/volumes/20230205180739/"
     target_dir = "./volumes/20230205180739/"
 
+    # Number of threads to use for downloading, 
+    # ideally enough to saturate the network but not more
+    # to prevent unnecessary switching overhead
+    threads = 8
+
     if range_input == "all":
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
-                        "--multi-thread-streams=8", "--transfers=8"], check=True)
+                        f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     else:
         ranges = re.findall(r'([0-9]+)-?([0-9]*)', range_input.strip('[]'))
+        file_list = []
+        start_end_list = []
         for start, end in ranges:
             start = int(start)
             end = int(end) if end else start
-            download_range_or_file(start, end, base_url, target_dir, username, password)
+            start_end_list.append((start, end))
+            if start == end:
+                filename = f"{start:05}.tif"
+                file_list.append(filename)
+            elif start < end:
+                for i in range(start, end + 1):
+                    filename = f"{i:05}.tif"
+                    file_list.append(filename)
+        
+        # If the number of files to download is less than some threashold, default 100,
+        # download each file individually to avoid the --files-from overhead
+        if(len(file_list) < 100):
+            for start, end in start_end_list:
+                download_range_or_file(start, end, base_url, target_dir, username, password, threads)
+        else:
+            download_range(base_url, target_dir, file_list, username, password, threads)
 
 if __name__ == "__main__":
     main()
