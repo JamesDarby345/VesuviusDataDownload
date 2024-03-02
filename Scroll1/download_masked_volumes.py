@@ -70,15 +70,15 @@ def main():
 
     scrollZAxis = 14375
 
-    range_input = input("Specify a range of .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
+    range_input = input("Specify a range of masked .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
 
     if range_input != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
         print(f"Unexpected format: {range_input}")
         print(f"Please use 'all' or the format [start-end,start-end,number] with valid scroll1 .tif volume numbers (0-{scrollZAxis})")
         return
 
-    base_url = "/full-scrolls/Scroll1.volpkg/volumes/20230205180739/"
-    target_dir = "./volumes/20230205180739/"
+    base_url = "/full-scrolls/Scroll1.volpkg/volumes_masked/20230205180739/"
+    target_dir = "./masked_volumes/20230205180739/"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more

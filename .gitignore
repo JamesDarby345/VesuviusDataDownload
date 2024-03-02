@@ -6,3 +6,4 @@ downloader_gui.py
 **/volume_grids/
 **/segments/
 **/volumes/
+**/masked_volumes/
