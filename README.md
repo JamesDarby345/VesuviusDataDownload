@@ -11,7 +11,7 @@ rclone copy "url in the server, Note 1" "local directory path to download to, No
 
 Note 1: an example is ":http:/full-scrolls/Scroll1.volpkg/volumes/20230205180739" 
 in dl.ash2txt.org you can simply copy the url in the browser.
-![url from browser](<Screenshot 2024-03-01 at 11.28.55 AM.png>)
+![url from browser](<Example_dlash2text_url.png>)
 
 Note 2: this can either be an absolute path, typically copied from a file explorer, or from the 
 command line, but it can also be a relative path from where the rclone is being run.
