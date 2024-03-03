@@ -29,9 +29,9 @@ def get_valid_range(s, e, scrollZAxis):
     return start, end
 
 #faster to download individual files like this if there are only a few
-def download_range_or_file(start, end, base_url, target_dir, username, password, threads):
+def download_range_or_file(start, end, base_url, target_dir, username, password, threads, format_string):
     if start == end:
-        filename = f"{start:05}.tif"
+        filename = format_string.format(start)
         print(f"Downloading {filename}...")
         subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                 "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
@@ -39,10 +39,15 @@ def download_range_or_file(start, end, base_url, target_dir, username, password,
 
     else:
         for i in range(start, end + 1):
-            filename = f"{i:05}.tif"
+            filename = format_string.format(i)
             subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
+            
+
+    subprocess.run(["rclone", "copy", f":http:{base_url}meta.json", f"{target_dir}",
+                    "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+                    f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
 # uses --files-from flag to download a list of files, 
 # faster & better reporting than many individual file downloads <- unsure exactly where the threshold is
@@ -51,6 +56,7 @@ def download_range(remote_path, target_dir, file_list, username, password, threa
     with NamedTemporaryFile(mode='w', delete=False) as temp_file:
         for file in file_list:
             temp_file.write(f"{file}\n")
+        temp_file.write("meta.json\n")
         temp_file_path = temp_file.name
 
     # Use the temporary file with the --files-from option in rclone
@@ -68,30 +74,41 @@ def main():
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
 
-    scrollZAxis = 26390
+    scrollZAxis = 26390 #number of tif volumes in the scroll or 'Z axis' of the scroll
+    scrollName = "PHerc1667"
+    scrollNum = "4"
+    scanId = "20231107190228" #default to canonical scanId
 
-    scan_input = input("Do you want to download the canonical 88keV 3.24um scan, or the 54keV 7.91um scan? Default canonical: (canonical or 54keV_7.91um) ")
+    scan_input = input("Do you want to download the canonical 88keV 3.24um scan, or the 54keV 7.91um scan? Default canonical: (0) canonical or (1) 54keV_7.91um : ")
     range_input = input("Specify a range of .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
+    
+    if scan_input.strip().lower() == "54kev_7.91um" or scan_input.strip().lower() == "1" or scan_input.strip().lower() == "(1)": 
+        scrollZAxis = 11173
+        scanId = "20231117161658"
 
     if range_input != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
         print(f"Unexpected format: {range_input}")
         print(f"Please use 'all' or the format [start-end,start-end,number] with valid scroll1 .tif volume numbers (0-{scrollZAxis})")
         return
 
-    if scan_input.lower() == "54keV_7.91um":
-        scrollZAxis = 11173
-        base_url = "/full-scrolls/PHerc1667.volpkg/volumes/20231117161658/"
-        target_dir = "./volumes/20231117161658/"
-    else:
-        base_url = "/full-scrolls/PHerc1667.volpkg/volumes/20231107190228/"
-        target_dir = "./volumes/20231107190228/"
+
+    base_url = f"/full-scrolls/{scrollName}.volpkg/volumes/{scanId}/"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
     # to prevent unnecessary switching overhead
     threads = 8
 
-    if range_input.lower() == "all":
+
+    # Download the config.json file and set target_dir to be a .volpkg directory for VC compatability
+    subprocess.run(["rclone", "copy", f":http:/full-scrolls/{scrollName}.volpkg/config.json", f"./{scrollName}.volpkg/",
+                    "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+                f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
+    
+    target_dir = f"./{scrollName}.volpkg/volumes/{scanId}/"
+    usingVC = True
+
+    if range_input == "all":
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
@@ -106,23 +123,30 @@ def main():
             #checks for invalid range numbers that bypass regex, but doesnt stop the download
             if start > scrollZAxis or end > scrollZAxis or start < 0 or end < 0:
                 print(f"Invalid range: {start}-{end}")
-                print(f"Please use valid scroll 4 .tif volume numbers (0-{scrollZAxis})")
+                print(f"Please use valid scroll {scrollNum} .tif volume numbers (0-{scrollZAxis})")
                 start, end = get_valid_range(start, end, scrollZAxis)
                 print(f"Using valid range: {start}-{end}")
             start_end_list.append((start, end))
+
+            # Determine the number of digits based on the length of scrollZAxis
+            num_digits = len(str(scrollZAxis))
+
+            # Create the format string dynamically, unsure of behaviour if len is 10+, but unlikely situation for Vesuvius
+            format_string = f"{{:0{num_digits}}}.tif"
+
             if start == end:
-                filename = f"{start:05}.tif"
+                filename = format_string.format(start)
                 file_list.append(filename)
             elif start < end:
                 for i in range(start, end + 1):
-                    filename = f"{i:05}.tif"
+                    filename = format_string.format(i)
                     file_list.append(filename)
         
         # If the number of files to download is less than some threashold, default 100,
         # download each file individually to avoid the --files-from overhead
         if(len(file_list) < 100):
             for start, end in start_end_list:
-                download_range_or_file(start, end, base_url, target_dir, username, password, threads)
+                download_range_or_file(start, end, base_url, target_dir, username, password, threads, format_string)
         else:
             download_range(base_url, target_dir, file_list, username, password, threads)
 
