@@ -74,20 +74,17 @@ def main():
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
 
-    scrollZAxis = 22940
-    scrollName = "PHerc0332"
-    scrollNum = "3"
-    scanId = "20231027191953" #default to canonical scanId
+    scrollZAxis = 26390 #number of tif volumes in the scroll or 'Z axis' of the scroll
+    scrollName = "PHerc1667"
+    scrollNum = "4"
+    scanId = "20231107190228" #default to canonical scanId
 
-    scan_input = input("Which scan do you want to download? canonical 53keV 3.24um scan, 53keV 7.91um scan, 70keV 3.24um. Default canonical: (0) canonical or (1) 54keV_7.91um or (2) 70keV_3.24um : ")
+    scan_input = input("Do you want to download the canonical 88keV 3.24um scan, or the 54keV 7.91um scan? Default canonical: (0) canonical or (1) 54keV_7.91um : ")
     range_input = input("Specify a range of .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
     
     if scan_input.strip().lower() == "54kev_7.91um" or scan_input.strip().lower() == "1" or scan_input.strip().lower() == "(1)": 
-        scrollZAxis = 9777
-        scanId = "20231117143551"
-    if scan_input.strip().lower() == "70kev_3.24um" or scan_input.strip().lower() == "2" or scan_input.strip().lower() == "(2)":
-        scrollZAxis = 22931
-        scanId = "20231201141544"
+        scrollZAxis = 11173
+        scanId = "20231117161658"
 
     if range_input != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
         print(f"Unexpected format: {range_input}")
