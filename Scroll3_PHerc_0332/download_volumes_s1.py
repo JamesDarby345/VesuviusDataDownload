@@ -76,8 +76,9 @@ def main():
     password = get_env_variable("PASSWORD", "password? ")
 
     scrollZAxis = 14375
-    scrollNum = "1"
-    scanId = "20230205180739"
+    scrollName = "PHerc0332"
+    scrollNum = "3"
+    scanId = "20231027191953" #default to canonical scanId
 
     #TODO: decide if we just want to default to yes and not ask?
     #creates an extra prompt as is
@@ -95,7 +96,7 @@ def main():
         print(f"Please use 'all' or the format [start-end,start-end,number] with valid scroll1 .tif volume numbers (0-{scrollZAxis})")
         return
 
-    base_url = f"/full-scrolls/Scroll1.volpkg/volumes/{scanId}/"
+    base_url = f"/full-scrolls/{scrollName}.volpkg/volumes/{scanId}/"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
@@ -107,11 +108,11 @@ def main():
         usingVC = False
     else:
         # If using Volume Cartographer, download the config.json file and set target_dir to be a .volpkg directory
-        subprocess.run(["rclone", "copy", f":http:/full-scrolls/Scroll{scrollNum}.volpkg/config.json", f"./Scroll{scrollNum}.volpkg/",
+        subprocess.run(["rclone", "copy", f":http:/full-scrolls/{scrollName}.volpkg/config.json", f"./{scrollName}.volpkg/",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                     f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
-        target_dir = f"./Scroll{scrollNum}.volpkg/volumes/{scanId}/"
+        target_dir = f"./{scrollName}.volpkg/volumes/{scanId}/"
         usingVC = True
 
     if range_input == "all":

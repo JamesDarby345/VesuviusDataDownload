@@ -96,7 +96,7 @@ def main():
         print(f"Please use 'all' or the format [start-end,start-end,number] with valid scroll1 .tif volume numbers (0-{scrollZAxis})")
         return
 
-    base_url = f"/full-scrolls/Scroll1.volpkg/volumes/{scanId}/"
+    base_url = f"/full-scrolls/{scrollName}.volpkg/volumes/{scanId}/"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
