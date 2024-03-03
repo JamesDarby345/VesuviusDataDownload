@@ -1,4 +1,5 @@
 config.env
+config.json
 downloader_gui.py
 .DS_Store
 /sh
@@ -11,3 +12,7 @@ downloader_gui.py
 **/surface_volume/
 **/fragment_data/
 **/renamedTifs/
+*.volpkg/
+# **/Scroll1.volpkg/
+# **/Scroll2.volpkg/
+# **/PHerc_0332.volpkg/

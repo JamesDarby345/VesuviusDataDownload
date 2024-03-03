@@ -76,7 +76,6 @@ def main():
     password = get_env_variable("PASSWORD", "password? ")
 
     scrollZAxis = 14375
-    scrollName = "Scroll1"
     scrollNum = "1"
     scanId = "20230205180739"
 
@@ -108,11 +107,11 @@ def main():
         usingVC = False
     else:
         # If using Volume Cartographer, download the config.json file and set target_dir to be a .volpkg directory
-        subprocess.run(["rclone", "copy", f":http:/full-scrolls/{scrollName}.volpkg/config.json", f"./{scrollName}.volpkg/",
+        subprocess.run(["rclone", "copy", f":http:/full-scrolls/Scroll{scrollNum}.volpkg/config.json", f"./Scroll{scrollNum}.volpkg/",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                     f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
-        target_dir = f"./{scrollName}.volpkg/volumes/{scanId}/"
+        target_dir = f"./Scroll{scrollNum}.volpkg/volumes/{scanId}/"
         usingVC = True
 
     if range_input == "all":
