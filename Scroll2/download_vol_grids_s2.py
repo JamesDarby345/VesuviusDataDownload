@@ -44,43 +44,29 @@ def main():
     load_env_variables()
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
-
-    """
-    No mask csv file for Scroll 2 is open source as of march 2nd 2024
-    """
-    # masked = input("Would you like to download just the useful (masked) cubes or all the cubes? (masked/all): ")
-    #TODO: add 88keV download option?
-    #Unlikely too many people will want to use that though
     
     base_url = "/full-scrolls/Scroll2.volpkg/volume_grids/20230210143520/"
     target_dir = "./volume_grids/20230210143520/"
+
+    #If mask.csv file is produced, put relative path here ex: mask_csv_file = "../Volume_Cube_Masks/mask_name.csv"
+    mask_csv_file = ""
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
     # to prevent unnecessary switching overhead
     threads = 8
 
-    # if masked == "all":
-    download_file(base_url, target_dir, username, password, threads)
-    # else:
-    #     #Default scroll only mask.csv file, (mask the non-scroll cubes)
-    #     #change the path here if you want to use a different mask.csv file
-    #     #code assumes the yxz coordinates in the .csv are the grids you want to download
-
-    #     #No mask csv file for Scroll 2 is open source as of march 2nd 2024
-    #     #mask_csv_file = "../Volume_Cube_Masks/scroll_1_54_mask.csv"
-    #     files = []
-
-    #     with open(mask_csv_file, newline='') as csvfile:
-    #         reader = csv.reader(csvfile)
-    #         next(reader)  # Skip header row
-    #         for jy, jx, jz in reader:
-    #             filename = f"cell_yxz_{int(jy):03d}_{int(jx):03d}_{int(jz):03d}.tif"
-    #             files.append(filename)
-
-
-
-    #     download_files_from_list(files, target_dir, username, password, base_url, threads)
+    if mask_csv_file == "":
+        download_file(base_url, target_dir, username, password, threads)
+    else:
+        files = []
+        with open(mask_csv_file, newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)  # Skip header row
+            for jy, jx, jz in reader:
+                filename = f"cell_yxz_{int(jy):03d}_{int(jx):03d}_{int(jz):03d}.tif"
+                files.append(filename)
+        download_files_from_list(files, target_dir, username, password, base_url, threads)
 
 
 if __name__ == "__main__":

@@ -49,6 +49,11 @@ def main():
     base_url = "/full-scrolls/PHerc0332.volpkg/volume_grids/20231027191953/"
     target_dir = "./volume_grids/20231027191953/"
 
+    #Default scroll only mask.csv file, (mask the non-scroll cubes)
+    #change the path here if you want to use a different mask.csv file
+    #code assumes the yxz coordinates in the .csv are the grids you want to download
+    mask_csv_file = "../Volume_Cube_Masks/pherc_0332_53.csv"
+
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
     # to prevent unnecessary switching overhead
@@ -57,10 +62,6 @@ def main():
     if masked == "all":
         download_file(base_url, target_dir, username, password, threads)
     else:
-        #Default scroll only mask.csv file, (mask the non-scroll cubes)
-        #change the path here if you want to use a different mask.csv file
-        #code assumes the yxz coordinates in the .csv are the grids you want to download
-        mask_csv_file = "../Volume_Cube_Masks/pherc_0332_53.csv"
         files = []
 
         with open(mask_csv_file, newline='') as csvfile:

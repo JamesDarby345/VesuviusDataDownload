@@ -13,7 +13,7 @@ Thus from the .obj file we can download the volume grids that contains it
 
 
 # Path to the directory containing the .obj file
-file_path = '/Users/jamesdarby/Documents/VesuviusScroll/GP/Ink_Model/Vesuvius-Grandprize-Winner/train_scrolls/20231210121321/20231210121321.obj'
+file_path = '/Path/to/your/file.obj'
 
 grid_coords = set() #in y, x, z order
 

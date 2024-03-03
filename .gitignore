@@ -12,7 +12,5 @@ config.json
 **/surface_volume/
 **/fragment_data/
 **/renamedTifs/
+**/ome-zarr
 *.volpkg/
-# **/Scroll1.volpkg/
-# **/Scroll2.volpkg/
-# **/PHerc_0332.volpkg/
