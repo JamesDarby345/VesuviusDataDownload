@@ -8,6 +8,7 @@ rclone copy "url in the server, Note 1" "local directory path to download to, No
 
 [put portable rclone install instructions here]
 
+The design is to whenever reasonable take all the files the user wants, and combine them into one rclone command. This is so rclone can handle the parallelism, as well as provide total size, download rate and eta information which is useful for the user, so they know about how it will take, and if they need to scale back their download due to space constraints etc. This does cause an around ~1 min delay as rclone 'starts up' so for smaller downloads I just use multiple sequential rclone commands. rclone appears to download small amounts of data faster this way without the --file-from flag startup cost, though this is untested. The feedback is faster anyway so it is a better user experience.
 
 Note 1: an example is ":http:/full-scrolls/Scroll1.volpkg/volumes/20230205180739" 
 in dl.ash2txt.org you can simply copy the url in the browser.

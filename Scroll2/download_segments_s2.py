@@ -93,7 +93,7 @@ def main():
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
 
-    base_url = "/full-scrolls/Scroll1.volpkg/paths/"
+    base_url = "/full-scrolls/Scroll2.volpkg/paths/"
     target_dir = "./segments"
 
     # Number of threads to use for downloading, 
@@ -103,11 +103,11 @@ def main():
 
     data_selection = input("Would you like to download just the layers (default), or also the .obj file, or all the segment files? (layers/obj/all): ")
     
-    csv_file_path = "./segments_to_download_s1.csv"
+    csv_file_path = "./segments_to_download_s2.csv"
     specified_segments = read_csv_to_array(csv_file_path)
     
     if specified_segments == []:
-        segments_to_download = input("\nEnter segment id's to download in a comma seperated format\nEx: 20231221180251,20231106155351_superseded,20231031143852 or all for all segments\nfrom this scroll. You can also specify them in the neighbouring segments_to_download_s1.csv file\nor if you want to download the segments submitted in the 2023 grand prize, enter gp (all/id's/gp): ")
+        segments_to_download = input("\nEnter segment id's to download in a comma seperated format\nEx: 20230507064642,20230508181757 or all for all segments\nfrom this scroll. You can also specify them\nin the neighbouring segments_to_download_s2.csv file (all/id's): ")
     else: 
         segments_to_download = "csv_passed_in_segment_ids"
 
@@ -120,19 +120,14 @@ def main():
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
-                            "--include", "**/layers/**", "--include","**/*.obj","--exclude", "**/*_points.obj"], check=True)
+                            "--filter", "+ **/layers/**", "--filter","+ **/*.obj","--filter", "- **/*_points.obj"], check=True)
         else:
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
                             "--include", "**/layers/**"], check=True)
     else:
-        if segments_to_download.strip().lower() == "gp":
-            gp_segments ="20230929220926,20231005123336,20231007101619,20231007101619,20231210121321,\
-                          20231012184423,20231022170901,20231221180251,20231106155351_superseded,20231031143852,\
-                          20231022170901,20230702185753,20231016151002"
-            specified_segments = comma_separated_string_to_array(gp_segments)
-        elif segments_to_download != "csv_passed_in_segment_ids":
+        if segments_to_download != "csv_passed_in_segment_ids":
             specified_segments = comma_separated_string_to_array(segments_to_download)
 
 
