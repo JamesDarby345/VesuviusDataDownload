@@ -1,5 +1,3 @@
-Add run permissions to exec_permissions.sh and it will add the execute permission to all the .sh files in the directory. Then you can run the .sh download scripts from the command line
-
 Notes on rclone: rclone is pretty versatile, and easy to use. 
 
 If your download stops half way, you can simply re-run it as rclone will not redownload any files that match and are the same size, this means even if one file is only half downloaded, simply re-running the command will fix it as well as not re download everything you already have in the target directory!
@@ -7,6 +5,8 @@ If your download stops half way, you can simply re-run it as rclone will not red
 the typical rclone command pattern is:
 
 rclone copy "url in the server, Note 1" "local directory path to download to, Note 2" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
+
+[put portable rclone install instructions here]
 
 
 Note 1: an example is ":http:/full-scrolls/Scroll1.volpkg/volumes/20230205180739" 

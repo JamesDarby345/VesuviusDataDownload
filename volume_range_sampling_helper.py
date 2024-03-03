@@ -6,7 +6,7 @@ to get a representative sample of the scroll to then
 create the masked cube .csv files for scrolls 2 & 4
 """
 scrollZAxis = 14427 #scroll 2 length 14427, scroll 4 length ...
-step = 500 #every nth volume to sample, 500 choosen as it lines up with vol cubes
+step = 100 #every nth volume to sample, 500 choosen as it lines up with vol cubes
 
 output = "["
 for i in range(0, scrollZAxis, step):
