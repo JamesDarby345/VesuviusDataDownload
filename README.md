@@ -110,7 +110,7 @@ python name_of_file.py
 ```
 Actual examples will follow in the How to use section.
 
-[Back to top](welcome-to-the-vesuvius-data-download-repo)
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## How to use
 Basic usage should (hopefully) be fairly simple, run the file you want with python from the command line and input the information it asks for. To know which file you want, and the rest of the details, keep reading.
 
@@ -134,11 +134,11 @@ You may also notice that the scripts will load without showing progress for ~1-2
 
 The download can be stopped at anytime with Ctrl+C in the terminal window. When you want to continue it, just re-run the file again. rclone will realize you already have some of the files and move on to the next one without downloading (if it is the same size as the one its trying to download). This means it will even re-download partially downloaded files. Additionally the scripts make nice folder structures for each data type, so accidentally overwriting data by running these (unchanged) scripts will not happen.
 
-[Back to top](welcome-to-the-vesuvius-data-download-repo)
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Motivation
 The download.sh file in Youssef's GP Ink Detection model works great for its use case, downloading all the segments used to train the ink detection model. But .sh doesnt work natively on windows, also the 100+ lines of mostly similar rclone commands with only a few parameters changing slightly triggered my software engineering senses that there must be a better way than this. After deiciding, maybe I want to look at all the unified segment .tifs as well, and having to write a script to edit the download.sh script to add them all in, I thought writing a script to edit a script is surly a sign of something not quite right, and this is getting annoying, even for me, a fairly technically adept user. These thoughts bounced around in my head until I made some time to create a better version. This is the result of that effort. This is not the final say on the matter, but it is a solid incremental improvement. 
 
-[Back to top](welcome-to-the-vesuvius-data-download-repo)
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Technical Development Decisions
 I have choosen to use python, as unlike .sh, bash or powershell scripts, python is portable across all OS's, and is as easy to understand, use and modify as reasonably possible.
 
@@ -173,7 +173,7 @@ and --multi-thread-streams=8 --transfers=8 which allow rclone to download multip
 
 This repo is using python subprocesses to run the rclone commands to add some additonal logic to make downloads easier and more customizable, while maintaining native portability across operating systems which would be lost is .sh, bash or .bat etc scripts were used.
 
-[Back to top](welcome-to-the-vesuvius-data-download-repo)
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Refrences/Data Contributions
 EduceLabs scanned and provided the foundational data we are working with, the Volumes & Fragments
 
@@ -181,4 +181,4 @@ EduceLabs scanned and provided the foundational data we are working with, the Vo
 
 @james darby on discord developed the code and masked the .tifs for scroll 1 & 2
 
-[Back to top](welcome-to-the-vesuvius-data-download-repo)
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
