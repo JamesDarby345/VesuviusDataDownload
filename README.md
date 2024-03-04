@@ -75,6 +75,7 @@ Open a new Command Prompt and type the below command to verify the installation.
 rclone --version
 ```
 
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## MacOS
 **Homebrew**
 If you dont already have homebrew, install it by running the following command in a terminal
@@ -91,7 +92,7 @@ brew install rclone
 Once the command completes, open a new terminal and verify the installation by typing:
 ```rclone --version```
 
-
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Linux
 **Download and Install Rclone:**
 Open Terminal.
@@ -149,7 +150,8 @@ without re-downloading the files that are already downloaded! A very handy featu
 I could of made the files into generalized download files, or even just one python file, instead of creating a version for data type for each scroll and fragment. But I wanted this repo to be as easy to use and free of oh uh, did I mess up moments as possible. I deicided enforcing/suggesting a reasonable data file structure by providing it as the default in the repo and then putting download files that do what they are named in each folder that then download the data into a folder next to them had some advantages over a more flexible script. This way the user doesnt need to worry about creating a directory structure themselves, reducing friction, and with rclone being able to sync files instead of redownloading themm, making the default behaviour downloading to the same place, unless the files are moved, makes that a ubiquiotus process the user doesnt even need to think about. Compared to making sure they specify the same download location as last time, this seemed like a better solution. The code also creates folders that seperate and put layers between the non-unique .tif names, making accidentally overwriting previous data imossible without modifying the code, something that made me very sad in the past when I may or may not of done that.
 Is this repo perfect? of course not, one sore spot is what if the data is stored over multiple disks? But I think this is a solid incremental improvement over the figure it out yourself system for most users.
 
-### Semi-organized notes on rclone commands
+[Back to top](#welcome-to-the-vesuvius-data-download-repo)
+  ### Semi-organized notes on rclone commands
 
 If your download stops half way, you can simply re-run it as rclone will not redownload any files that match and are the same size, this means even if one file is only half downloaded, simply re-running the command will fix it as well as not re download everything you already have in the target directory!
 
