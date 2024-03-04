@@ -5,11 +5,11 @@ The purpose of this repo is to remove as much of the fricton and increase the cl
 It has three major parts.
   - This README file, which explains how to setup and run the python code to download the Vesuvius data.
   - The python files that make many common download use cases much more convinient than writing your own scripts
-  - The [wiki](https://github.com/JamesDarby345/VesuviusDataDownload/wiki) pages which explains & contains
+  - The [wiki pages](https://github.com/JamesDarby345/VesuviusDataDownload/wiki) which explains & contains the following:
      - what the data is
      - the use case for each part of the data
      - (some of) the community developed tools & the data they work best with
-     - a quick reference handbook for scroll and fragment data sizes, scan id's, scan resolution and keV and dl.ash2txt.org links
+     - a quick [data reference handbook](https://github.com/JamesDarby345/VesuviusDataDownload/wiki/Vesuvius-Data-Handbook) for scroll and fragment data sizes, scan id's, scan resolution and keV and dl.ash2txt.org links
 
 ## README Table of Contents
 - Prerequisites
