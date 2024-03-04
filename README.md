@@ -43,23 +43,29 @@ Download the zip file for Windows (e.g., rclone-current-windows-amd64.zip for 64
 **Extract the ZIP File:**
 Right-click the downloaded .zip file and select "Extract All...".
 Choose a destination folder where you want to store rclone (e.g., C:\rclone).
+Save this destination path as we will use it in the next step.
 
 **Add Rclone to the PATH:**
+
 1. Search for "Edit the system environment variables" in the Start menu and open it.
 
-<img width=600 alt="windows search bar ex" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/16973bce-1d04-49d8-b99d-2bbfbb1531f5><br>
+   <img width=600 alt="windows search bar ex" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/16973bce-1d04-49d8-b99d-2bbfbb1531f5>
 
 2. Click the "Environment Variables..." button.
 
-<img width=400 alt="Environment Variables button" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/4f11c8f0-c8eb-4d64-acbf-e4f1ed0f1aa5><br>
+   <img width=400 alt="Environment Variables button" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/4f11c8f0-c8eb-4d64-acbf-e4f1ed0f1aa5>
 
 3. Under "System variables", scroll down and select the "Path" variable, then click "Edit...".
 
-<img width=400 alt="System variables add new env var" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/17fc7782-8709-4e8a-8445-fec759008c43><br>
+   <img width=400 alt="edit path" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/f2b9c086-46a0-44b8-a95f-cd56d5b047b9>
 
-4. Click "New" and add the path to the folder where you extracted rclone (e.g., C:\rclone) and Click "OK" to close all dialogs.
-
-<img width=400 alt="Paste path to rclone" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/d8f93ae3-5fb3-4d0e-8909-79cffa53b25d><br>
+4. Click "New" to add a new environment variable
+   
+   <img width=400 alt="Add new env var" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/17fc7782-8709-4e8a-8445-fec759008c43>
+   
+6. Add the path to the folder where you extracted rclone (e.g., C:\rclone) and Click "OK" to close all dialogs. You can copy paste is from the top bar of file explorer if you are in the directory with the rclone.exe file if you didnt save it from before.
+   
+   <img width=400 alt="Paste path to rclone" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/d8f93ae3-5fb3-4d0e-8909-79cffa53b25d><br>
 
 
 **Verify Installation:**
@@ -96,8 +102,8 @@ curl https://rclone.org/install.sh | sudo bash
 **Verify Installation:**
 Once the script completes, open a new terminal and verify the installation by typing:
 ```rclone --version```
-
-With rclone installed, the python files should be ready to run! They are designed to run from the command line by navigating to the directory they are in and running them with the below command pattern. 
+<br><br><br>
+**Once finished,** with rclone installed, the python files should be ready to run! They are designed to run from the command line by navigating to the directory they are in and running them with the below command pattern. 
 ```
 python name_of_file.py
 ```
