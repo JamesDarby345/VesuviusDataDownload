@@ -16,9 +16,10 @@ It has three major parts.
 - [Installation Instructions](#installation-instructions)
 - [How to use](#how-to-use)
 - [Motivation](#motivation)
-- [Technical Development Decisions](#techincal-development-decisions)
+- [Technical Development Decisions](#technical-development-decisions)
   - [semi organized notes on rclone commands](#semi-organized-notes-on-rclone-commands)
 - [Refrences/Data Contributions](#refrencesdata-contributions)
+- Do you think anything is missing? Anything unclear? Let me know with a github issue, or a message on discord. Im @james darby on the Vesuvius Server.
 
 ## Prerequisites
 1. I assume some fundamental knowledge of how to navigate into directories with a terminal, have git and python installed (to clone the repo and run the files) & how to run python files from the command line (cd to the directory, and type python file_name.py). 
@@ -110,7 +111,9 @@ python name_of_file.py
 Actual examples will follow in the How to use section.
 
 ## How to use
-Basic usage is quite simple. Use the [data refrence wiki](https://github.com/JamesDarby345/VesuviusDataDownload/wiki) (especially [this page](https://github.com/JamesDarby345/VesuviusDataDownload/wiki/Vesuvius-Data-Reference)) to select which kind of data you would like to download. Then navigate to the appropriate folder. 
+Basic usage should (hopefully) be fairly simple, run the file you want with python from the command line and input the information it asks for. To know which file you want, and the rest of the details, keep reading.
+
+Use the [data refrence wiki](https://github.com/JamesDarby345/VesuviusDataDownload/wiki) (especially [this page](https://github.com/JamesDarby345/VesuviusDataDownload/wiki/Vesuvius-Data-Reference)) to select which kind of data you would like to download. Then navigate to the appropriate folder. 
 - The Fragments folder contains Fragment folders 1-6 and their associated fragment surface download file. (download_fragment_surface_fx.py)
 - Each Scroll folder contains the download scripts for that Scroll
   - The scroll's Volumes (download_volumes_sx.py)
@@ -120,7 +123,15 @@ Basic usage is quite simple. Use the [data refrence wiki](https://github.com/Jam
 
 Each file type works a little bit differently, but simply navigating into the folder and running the file with python file_name.py will cause the script to prompt you for the minimal information it needs and will then begin to download. Just doing this should be enough to get you started.
 
-You will notice that each file will prompt you for a username and password, this is to login to the dl.ash2txt.org server, and are the same ones you receive after accepting the data agreement. If like me you quickly get annoyed by putting in the username and password, you can edit (or create if its not there) the ```config.env``` file which is in the top level of the repo, and put the username and password in there and the scripts will use that instead of prompting you. Be careful to not release the username and password to those who have not agreed to the data liscense, especially if you contribute to this repo. 
+You will notice that each file will prompt you for a username and password, this is to login to the dl.ash2txt.org server, and are the same ones you receive after accepting the data agreement. If like me you quickly get annoyed by putting in the username and password, you can edit (or create if its not there) the ```config.env``` file which is in the top level of the repo, and put the username and password in there and the scripts will use that instead of prompting you. Be careful to not accidentally release the username and password to those who have not agreed to the data liscense, especially if you contribute to this repo. 
+
+You may also notice that the scripts will load without showing progress for ~1-2 minute for larger download requests. This is expected as rclone is 'warming up' to download a large number of files efficently, synchronising with what you may already have, and will be able to provide download rate, the total download size and approximate ETA reporting once done. Below is what to expect the output to look like when starting the command, and after a few minutes for the larger downloads. 
+<img width=400 alt="rclone starting" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/1e6fc52b-5867-49b3-8e53-843a017c78fc>
+<img width=400 alt"rclone running" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/8ede1eb8-dfda-476d-9d78-cb18597368cc>
+
+
+
+The download can be stopped at anytime with Ctrl+C in the terminal window. When you want to continue it, just re-run the file again. rclone will realize you already have some of the files and move on to the next one without downloading (if it is the same size as the one its trying to download). This means it will even re-download partially downloaded files. Additionally the scripts make nice folder structures for each data type, so accidentally overwriting data by running these (unchanged) scripts will not happen.
    
 ## Motivation
 The download.sh file in Youssef's GP Ink Detection model works great for its use case, downloading all the segments used to train the ink detection model. But .sh doesnt work natively on windows, also the 100+ lines of mostly similar rclone commands with only a few parameters changing slightly triggered my software engineering senses that there must be a better way than this. After deiciding, maybe I want to look at all the unified segment .tifs as well, and having to write a script to edit the download.sh script to add them all in, I thought writing a script to edit a script is surly a sign of something not quite right, and this is getting annoying, even for me, a fairly technically adept user. These thoughts bounced around in my head until I made some time to create a better version. This is the result of that effort. This is not the final say on the matter, but it is a solid incremental improvement. 
