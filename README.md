@@ -22,7 +22,7 @@ It has three major parts.
 
 ## Prerequisites
 1. I assume some fundamental knowledge of how to navigate into directories with a terminal & how to run python files. 
-There are many great tutorial on this, and if you ever get stuck, we live in a post [chatGPT](https://chat.openai.com/) world, and these two things are well within its capabilities to explain, so ask it to help!
+There are many great tutorial on this, and if you ever get stuck on this, or anything else in this repo, or challenge, we live in a post [chatGPT](https://chat.openai.com/) world, and these two things are well within its capabilities to explain, so ask it to help! Asking clear questions with as much context as is reasonable helps to get better responses back.
 
 2. Before proceeding, you must agree to the [data license](https://docs.google.com/forms/d/e/1FAIpQLSf2lCOCwnO1xo0bc1QdlL0a034Uoe7zyjYBY2k33ZHslHE38Q/viewform) to be provided the username and password for the data server. This login is required to use the download scripts in this repo.
 
