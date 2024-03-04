@@ -18,8 +18,9 @@ It has three major parts.
 - [Motivation](#motivation)
 - [Technical Development Decisions](#technical-development-decisions)
   - [Semi organized notes on rclone commands](#semi-organized-notes-on-rclone-commands)
-- [Refrences/Data Contributions](#refrencesdata-contributions)
-- Do you think anything is missing? Anything unclear? Let me know with a github issue, or a message on discord. Im @james darby on the Vesuvius Server.
+- [Refrences/Data Contributions](#referencesdata-contributions)
+
+Do you think anything is missing? Anything unclear? Let me know with a github issue, or a message on discord. Im @james darby on the Vesuvius Server.
 
 ## Prerequisites
 1. I assume some fundamental knowledge of how to navigate into directories with a terminal, have git and python installed (to clone the repo and run the files) & how to run python files from the command line (cd to the directory, and type python file_name.py). 
@@ -128,12 +129,19 @@ Each file type works a little bit differently, but simply navigating into the fo
 You will notice that each file will prompt you for a username and password, this is to login to the dl.ash2txt.org server, and are the same ones you receive after accepting the data agreement. If like me you quickly get annoyed by putting in the username and password, you can edit (or create if its not there) the ```config.env``` file which is in the top level of the repo, and put the username and password in there and the scripts will use that instead of prompting you. Be careful to not accidentally release the username and password to those who have not agreed to the data liscense, especially if you contribute to this repo. 
 
 You may also notice that the scripts will load without showing progress for ~1-2 minute for larger download requests. This is expected as rclone is 'warming up' to download a large number of files efficently, synchronising with what you may already have, and will be able to provide download rate, the total download size and approximate ETA reporting once done. Below is what to expect the output to look like when starting the command, and after a few minutes for the larger downloads. 
-<img width=400 alt="rclone starting" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/1e6fc52b-5867-49b3-8e53-843a017c78fc>
-<img width=400 alt"rclone running" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/8ede1eb8-dfda-476d-9d78-cb18597368cc>
 
+Output on startup<br>
+<img width=600 alt="rclone starting" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/1e6fc52b-5867-49b3-8e53-843a017c78fc><br><br>
+Output after startup complete<br>
+<img width=600 alt="rclone running" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/8ede1eb8-dfda-476d-9d78-cb18597368cc>
 
+All thats left to do is wait for a few seconds to a few days, depending on how much data you requested, and how fast your internet is. But over a few days many unexpected things could happen such as power outages, people complaining the internet is slow, or the dog eating the router. But do not worry, as long as your computer didnt blow up and the downloaded files are still intact, you didnt lose any progress. 
 
-The download can be stopped at anytime with Ctrl+C in the terminal window. When you want to continue it, just re-run the file again. rclone will realize you already have some of the files and move on to the next one without downloading (if it is the same size as the one its trying to download). This means it will even re-download partially downloaded files. Additionally the scripts make nice folder structures for each data type, so accidentally overwriting data by running these (unchanged) scripts will not happen.
+In fact the download can be stopped at anytime with ```Ctrl+C``` in the terminal window or closing the terminal itself. When you want to continue the download, just re-run the file again. rclone will realize you already have some of the files and move on to the next one without downloading (if it is the same size as the one its trying to download). This means it will even re-download partially downloaded files. Additionally the scripts make nice folder structures for each data type, so accidentally overwriting data by running these (unchanged) scripts will not happen.
+
+If you want more details on what exaclty an option does or how one of the download scripts work, a wiki page for that is in the works and will be linked here soon. 
+
+Hpe your download goes well and that you help us read the scrolls! And if you have read this far and think this repo will be helpful, I wouldnt mind a star on it :)
 
 [Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Motivation
@@ -157,15 +165,15 @@ If your download stops half way, you can simply re-run it as rclone will not red
 
 The typical rclone command pattern is:
 
-rclone copy "url in the server, Note 1" "local directory path to download to, Note 2" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
+rclone copy "url in the server, _Note 1_" "local directory path to download to, _Note 2_" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
 
 The design is to whenever reasonable take all the files the user wants, and combine them into one rclone command. This is so rclone can handle the parallelism, as well as provide total size, download rate and eta information which is useful for the user, so they know about how it will take, and if they need to scale back their download due to space constraints etc. This does cause an around ~1 min delay as rclone 'starts up' so for smaller downloads I just use multiple sequential rclone commands. rclone appears to download small amounts of data faster this way without the --file-from flag startup cost, though this is untested. The feedback is faster anyway so it is a better user experience.
 
-Note 1: an example is ":http:/full-scrolls/Scroll1.volpkg/volumes/20230205180739" 
+_Note 1_: an example is ":http:/full-scrolls/Scroll1.volpkg/volumes/20230205180739" 
 in dl.ash2txt.org you can simply copy the url in the browser.
 ![url from browser](<Example_dlash2text_url.png>)
 
-Note 2: this can either be an absolute path, typically copied from a file explorer, or from the 
+_Note 2_: this can either be an absolute path, typically copied from a file explorer, or from the 
 command line, but it can also be a relative path from where the rclone is being run.
 An example is putting "./scroll1" and rclone will make that directory in its location and copy the files there
 
@@ -176,7 +184,7 @@ and --multi-thread-streams=8 --transfers=8 which allow rclone to download multip
 This repo is using python subprocesses to run the rclone commands to add some additonal logic to make downloads easier and more customizable, while maintaining native portability across operating systems which would be lost is .sh, bash or .bat etc scripts were used.
 
 [Back to top](#welcome-to-the-vesuvius-data-download-repo)
-## Refrences/Data Contributions
+## References/Data Contributions
 EduceLabs scanned and provided the foundational data we are working with, the Volumes & Fragments
 
 @Spelufo on discord generously open sourced the pherc_0332_53.csv and scroll_1_54_mask.csv volume grid masks, as well as developing the code to create the volume grids.
