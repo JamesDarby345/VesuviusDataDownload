@@ -12,13 +12,13 @@ It has three major parts.
      - a quick [data reference handbook](https://github.com/JamesDarby345/VesuviusDataDownload/wiki/Vesuvius-Data-Handbook) for scroll and fragment data sizes, scan id's, scan resolution and keV and dl.ash2txt.org links
 
 ## README Table of Contents
-- Prerequisites
+- [Prerequisites](#prerequisites)
 - [Installation Instructions](#installation-instructions)
 - [How to use](#how-to-use)
-- Motivation
-- Technical Development Decisions
-  - semi organized notes on rclone commands
-- Refrences/Data Contributions
+- [Motivation](#motivation)
+- [Technical Development Decisions](#techincal-development-decisions)
+  - [semi organized notes on rclone commands](#semi-organized-notes-on-rclone-commands)
+- [Refrences/Data Contributions](#refrencesdata-contributions)
 
 ## Prerequisites
 1. I assume some fundamental knowledge of how to navigate into directories with a terminal, have git and python installed (to clone the repo and run the files) & how to run python files from the command line (cd to the directory, and type python file_name.py). 
@@ -110,6 +110,17 @@ python name_of_file.py
 Actual examples will follow in the How to use section.
 
 ## How to use
+Basic usage is quite simple. Use the [data refrence wiki](https://github.com/JamesDarby345/VesuviusDataDownload/wiki) (especially [this page](https://github.com/JamesDarby345/VesuviusDataDownload/wiki/Vesuvius-Data-Reference)) to select which kind of data you would like to download. Then navigate to the appropriate folder. 
+- The Fragments folder contains Fragment folders 1-6 and their associated fragment surface download file. (download_fragment_surface_fx.py)
+- Each Scroll folder contains the download scripts for that Scroll
+  - The scroll's Volumes (download_volumes_sx.py)
+  - The Masked Volumes for Scroll 1 & 2 (download_masked_volumes_sx.py)
+  - The scroll's Volume Grids (download_volume_grids_sx.py)
+  - The Segments segmented from that scroll (download_segments_sx.py)
+
+Each file type works a little bit differently, but simply navigating into the folder and running the file with python file_name.py will cause the script to prompt you for the minimal information it needs and will then begin to download. Just doing this should be enough to get you started.
+
+You will notice that each file will prompt you for a username and password, this is to login to the dl.ash2txt.org server, and are the same ones you receive after accepting the data agreement. If like me you quickly get annoyed by putting in the username and password, you can edit (or create if its not there) the ```config.env``` file which is in the top level of the repo, and put the username and password in there and the scripts will use that instead of prompting you. Be careful to not release the username and password to those who have not agreed to the data liscense, especially if you contribute to this repo. 
    
 ## Motivation
 The download.sh file in Youssef's GP Ink Detection model works great for its use case, downloading all the segments used to train the ink detection model. But .sh doesnt work natively on windows, also the 100+ lines of mostly similar rclone commands with only a few parameters changing slightly triggered my software engineering senses that there must be a better way than this. After deiciding, maybe I want to look at all the unified segment .tifs as well, and having to write a script to edit the download.sh script to add them all in, I thought writing a script to edit a script is surly a sign of something not quite right, and this is getting annoying, even for me, a fairly technically adept user. These thoughts bounced around in my head until I made some time to create a better version. This is the result of that effort. This is not the final say on the matter, but it is a solid incremental improvement. 
@@ -124,7 +135,7 @@ without re-downloading the files that are already downloaded! A very handy featu
 I could of made the files into generalized download files, or even just one python file, instead of creating a version for data type for each scroll and fragment. But I wanted this repo to be as easy to use and free of oh uh, did I mess up moments as possible. I deicided enforcing/suggesting a reasonable data file structure by providing it as the default in the repo and then putting download files that do what they are named in each folder that then download the data into a folder next to them had some advantages over a more flexible script. This way the user doesnt need to worry about creating a directory structure themselves, reducing friction, and with rclone being able to sync files instead of redownloading themm, making the default behaviour downloading to the same place, unless the files are moved, makes that a ubiquiotus process the user doesnt even need to think about. Compared to making sure they specify the same download location as last time, this seemed like a better solution. The code also creates folders that seperate and put layers between the non-unique .tif names, making accidentally overwriting previous data imossible without modifying the code, something that made me very sad in the past when I may or may not of done that.
 Is this repo perfect? of course not, one sore spot is what if the data is stored over multiple disks? But I think this is a solid incremental improvement over the figure it out yourself system for most users.
 
-### Semi-organized notes on rclone commands:
+### Semi-organized notes on rclone commands
 
 If your download stops half way, you can simply re-run it as rclone will not redownload any files that match and are the same size, this means even if one file is only half downloaded, simply re-running the command will fix it as well as not re download everything you already have in the target directory!
 
