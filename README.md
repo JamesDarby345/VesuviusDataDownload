@@ -1,6 +1,10 @@
 
 # Welcome to the Vesuvius Data Download Repo
-The purpose of this repo is to remove as much of the fricton and increase the clarity of, what the Vesuvius Data is, what data you want for your use case, and how to download it, as possible. 
+<p align="center">
+<img width=300 alt="Vesuvius data download repo icon" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/dfa44677-f063-436d-88b4-e92bb8891848>
+</p> 
+
+The purpose of this repo is to remove as much of the fricton and increase the clarity of, what the Vesuvius Data is, what data you want for your use case, and how to download it, as possible.
 
 It has three major parts.
   - This README file, which explains how to setup and run the python code to download the Vesuvius data.
