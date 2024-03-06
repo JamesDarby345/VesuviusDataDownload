@@ -22,8 +22,8 @@ def main():
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
 
-    base_url = "/fragments/PHerc0051Cr04Fr08.volpkg/working/PHerc0051Cr04Fr08_53keV_3.24um/surface_processing/"
-    target_dir = "./fragment_data"
+    base_url = "/fragments/PHerc0051Cr04Fr08.volpkg/working/PHerc0051Cr04Fr08_53keV_3.24um/surface_processing"
+    target_dir = "./"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
@@ -37,7 +37,7 @@ def main():
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     else:
-        subprocess.run(["rclone", "copy", f":http:{base_url}/surface_volume", f"{target_dir}/surface_volume",
+        subprocess.run(["rclone", "copy", f":http:{base_url}/surface_volume", f"{target_dir}surface_volume",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
