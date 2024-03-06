@@ -13,3 +13,15 @@ config.json
 **/renamedTifs/
 **/ome-zarr
 *.volpkg/
+**/Fragment1
+!**/Fragment1/*.py
+**/Fragment2
+!**/Fragment2/*.py
+**/Fragment3
+!**/Fragment3/*.py
+**/Fragment4
+!**/Fragment4/*.py
+**/Fragment5
+!**/Fragment5/*.py
+**/Fragment6
+!**/Fragment6/*.py
