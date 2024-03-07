@@ -59,7 +59,7 @@ def main():
     # to prevent unnecessary switching overhead
     threads = 8
 
-    if masked == "all":
+    if masked.lower().strip() == "all":
         download_file(base_url, target_dir, username, password, threads)
     else:
         files = []

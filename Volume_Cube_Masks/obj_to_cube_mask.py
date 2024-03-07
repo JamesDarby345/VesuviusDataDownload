@@ -36,7 +36,7 @@ sorted_grid_coords = sorted(grid_coords)
 
 #extract the id from the path .obj file
 id = file_path.split('/')[-1].split('.')[0]
-csv_file_path = f'{id}_grid_mask.csv'
+csv_file_path = f'../Volume_Cube_Masks/{id}_obj_grid_mask.csv'
 
 # Write to the CSV file
 with open(csv_file_path, 'w', newline='') as csvfile:

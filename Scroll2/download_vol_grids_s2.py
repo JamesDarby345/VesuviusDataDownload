@@ -44,19 +44,20 @@ def main():
     load_env_variables()
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
+    masked = input("Would you like to download just the useful (masked) cubes or all the cubes? (masked/all): ")
     
     base_url = "/full-scrolls/Scroll2.volpkg/volume_grids/20230210143520/"
     target_dir = "./volume_grids/20230210143520/"
 
     #If mask.csv file is produced, put relative path here ex: mask_csv_file = "../Volume_Cube_Masks/mask_name.csv"
-    mask_csv_file = ""
+    mask_csv_file = "../Volume_Cube_Masks/Scroll2_3520_full_scroll_cube_mask.csv"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
     # to prevent unnecessary switching overhead
     threads = 8
 
-    if mask_csv_file == "":
+    if masked.lower().strip() == "all":
         download_file(base_url, target_dir, username, password, threads)
     else:
         files = []

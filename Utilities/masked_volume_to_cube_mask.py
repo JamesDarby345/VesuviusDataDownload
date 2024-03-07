@@ -42,7 +42,7 @@ duplicate_blank_sum = 0
 # Then use a sliding window of cube_size x cube_size x volumes_per_cube to check for blank cubes
 # TODO ensure/test that the x,y,z coordinates are correct
 for i in range(0, len(file_list), volumes_per_cube):
-    print(f"Processing images {i} to {i+volumes_per_cube}, aka volume range {i*step} to {(i+volumes_per_cube)*step}")
+    print(f"Processing mask sample images {i} to {i+volumes_per_cube}, representing volume range {i*step} to {(i+volumes_per_cube)*step}")
     volume = tifffile.imread(f"{masked_volume_path}/{file_list[i]}")  # Read the volume from the masked volume directory
     volume = np.moveaxis(volume, 0, -1)  # Move the axis to the end, so that the shape is (x, y)
     for j in range(1, volumes_per_cube):
@@ -59,12 +59,14 @@ print(f"Initial cube mask sum: {mask_sum}")
 print(f"Blank cube sum: {blank_sum}")
 print(f"Final cube mask sum: {np.sum(cube_mask)}")
 
-#Transform the True element indicies of cube_mask into a .csv file with header jy, jx, jz
-#This will be the cube mask file
-csv_file_path = f'../Volume_Cube_Masks/{masked_volume_path.split("/")[-1]}_full_scroll_cube_mask.csv'
+# Transform the True element indicies of cube_mask into a .csv file with header jy, jx, jz
+# This will be the cube mask file
+# NOTE: File naming assumes you are following the Vesuvius Data Download
+# repo folder structure and using in the Utilities folder
+csv_file_path = f'../Volume_Cube_Masks/{masked_volume_path.split("/")[-3]}_{masked_volume_path.split("/")[-1][-4:]}_full_scroll_cube_mask.csv'
 sorted_cube_coords = np.argwhere(cube_mask)  # Get the indices of the True elements in the cube_mask
 sorted_cube_coords = sorted_cube_coords.tolist()  # Convert the indices to a list
-# print(sorted_cube_coords)
+
 with open(csv_file_path, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     
@@ -73,4 +75,6 @@ with open(csv_file_path, 'w', newline='') as csvfile:
     
     # Iterate through the sorted set and write each tuple to the csv file
     for coord in sorted_cube_coords:
+        # Add one to each coordinate to 1-index the coordinate as per the volume grid naming convention
+        coord = [c + 1 for c in coord]
         writer.writerow(coord)
