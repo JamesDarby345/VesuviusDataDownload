@@ -61,7 +61,7 @@ print(f"Final cube mask sum: {np.sum(cube_mask)}")
 
 #Transform the True element indicies of cube_mask into a .csv file with header jy, jx, jz
 #This will be the cube mask file
-csv_file_path = f'../Volume_Cube_Masks/{masked_volume_path.split("/")[-1]}_cube_mask.csv'
+csv_file_path = f'../Volume_Cube_Masks/{masked_volume_path.split("/")[-1]}_full_scroll_cube_mask.csv'
 sorted_cube_coords = np.argwhere(cube_mask)  # Get the indices of the True elements in the cube_mask
 sorted_cube_coords = sorted_cube_coords.tolist()  # Convert the indices to a list
 # print(sorted_cube_coords)
