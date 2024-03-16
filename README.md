@@ -145,7 +145,7 @@ In fact the download can be stopped at anytime with ```Ctrl+C``` in the terminal
 
 If you want more details on what exaclty an option does or how one of the download scripts work, a wiki page for that is in the works and will be linked here soon. 
 
-Hpe your download goes well and that you help us read the scrolls! And if you have read this far and think this repo will be helpful, I wouldnt mind a star on it :)
+Hope your download goes well and that you help us read the scrolls! And if you have read this far and think this repo will be helpful, I wouldnt mind a star on it :)
 
 [Back to top](#welcome-to-the-vesuvius-data-download-repo)
 ## Motivation
