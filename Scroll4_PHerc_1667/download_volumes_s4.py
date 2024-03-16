@@ -93,6 +93,9 @@ def main():
 
 
     base_url = f"/full-scrolls/{scrollName}.volpkg/volumes/{scanId}/"
+    target_prefix = "./" #change this to point to a different download location
+    target_dir = target_prefix + f"{scrollName}.volpkg/volumes/{scanId}"
+
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
@@ -101,13 +104,10 @@ def main():
 
 
     # Download the config.json file and set target_dir to be a .volpkg directory for VC compatability
-    subprocess.run(["rclone", "copy", f":http:/full-scrolls/{scrollName}.volpkg/config.json", f"./{scrollName}.volpkg/",
+    subprocess.run(["rclone", "copy", f":http:/full-scrolls/{scrollName}.volpkg/config.json", f"{target_prefix}{scrollName}.volpkg/",
                     "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                 f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     
-    target_dir = f"./{scrollName}.volpkg/volumes/{scanId}/"
-    usingVC = True
-
     if range_input == "all":
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",

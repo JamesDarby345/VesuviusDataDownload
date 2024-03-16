@@ -19,7 +19,7 @@ Scroll 3 canonical length: 22940
 Scroll 4 canonical length: 26390
 """
 
-scrollZAxis = 14427 #Scroll length/number of volumes/scroll Z axis
+scrollZAxis = 26390 #Scroll length/number of volumes/scroll Z axis
 step = 100 #every nth volume to sample
 
 output = "["
