@@ -17,8 +17,6 @@ file_path = '/Path/to/your/file.obj'
 
 grid_coords = set() #in y, x, z order
 
-grid_coords = set()  # in y, x, z order
-
 with open(file_path, "r") as fd:
     for line in fd:
         line = line.strip()

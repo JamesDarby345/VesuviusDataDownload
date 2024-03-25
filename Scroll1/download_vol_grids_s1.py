@@ -44,7 +44,7 @@ def main():
     load_env_variables()
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
-    masked = input("Would you like to download just the useful (masked) cubes or all the cubes? (masked/all): ")
+    masked = input("Would you like to download just the useful (masked) cubes, the cubes intersecting the gp section, or all the cubes? (masked/gp/all): ")
 
     base_url = "/full-scrolls/Scroll1.volpkg/volume_grids/20230205180739/"
     target_dir = "./volume_grids/20230205180739/"
@@ -53,6 +53,7 @@ def main():
     #change the path here if you want to use a different mask.csv file
     #code assumes the yxz coordinates in the .csv are the grids you want to download
     mask_csv_file = "../Volume_Cube_Masks/scroll_1_54_mask.csv"
+    gp_mask_csv_file = "../Volume_Cube_Masks/Scroll_gp_grid_mask.csv"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
@@ -61,6 +62,12 @@ def main():
 
     if masked.lower().strip() == "all":
         download_file(base_url, target_dir, username, password, threads)
+    elif masked.lower().strip() == "gp":
+        files = []
+
+        with open(gp_mask_csv_file, newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)
     else:
         files = []
 

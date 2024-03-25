@@ -15,7 +15,10 @@ def generate_layers_file_list(dir_ids, base_remote_path, username, password, typ
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
 
             if type == "obj":
-                file_paths = f"{dir_id}.obj"
+                if len(dir_id.split('_')) > 1:
+                    file_paths = f"{dir_id.split('_')[0]}.obj"
+                else: 
+                    file_paths = f"{dir_id}.obj"
               
             layer_paths = subprocess.check_output(["rclone", "lsf", f":http:{base_remote_path}{dir_id}/layers",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
@@ -129,7 +132,7 @@ def main():
     else:
         if segments_to_download.strip().lower() == "gp":
             gp_segments ="20230929220926,20231005123336,20231007101619,20231007101619,20231210121321,\
-                          20231012184423,20231022170901,20231221180251,20231106155351_superseded,20231031143852,\
+                          20231012184423_superseded,20231022170901,20231221180251,20231106155351_superseded,20231031143852,\
                           20231022170901,20230702185753,20231016151002"
             specified_segments = comma_separated_string_to_array(gp_segments)
         elif segments_to_download != "csv_passed_in_segment_ids":
