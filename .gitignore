@@ -25,3 +25,5 @@ config.json
 !**/Fragment5/*.py
 **/Fragment6
 !**/Fragment6/*.py
+test/
+test_0999/
