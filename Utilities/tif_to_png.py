@@ -32,11 +32,11 @@ Scroll 3 canonical length: 22940
 Scroll 4 canonical length: 26390
 """
 
-input_dir = '/path/to/input/dir/'
-output_dir = '/path/to/output/dir/'
+input_dir = '/Users/jamesdarby/Desktop/finetune_detect-a-scroll/to_pngify'
+output_dir = '/Users/jamesdarby/Desktop/finetune_detect-a-scroll/to_annotate'
 start_range = 0  # Start range index 
-end_range = 1  # End range index 
-compress = False #lossless compression, False for no compression, will make file smaller but increase r/w times
+end_range = 20000  # End range index (range doesnt need to include all numbers to work)
+compress = True #lossless compression, False for no compression, will make file smaller but increase r/w times
 downsample = 1 # Downsample factor (1 for no downsampling)
 overwrite = False # Overwrite existing files
 
