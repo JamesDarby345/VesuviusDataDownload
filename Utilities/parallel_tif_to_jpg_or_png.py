@@ -41,25 +41,33 @@ def convert_tif(source_folder, output_format='jpg', quality=85, overwrite=True):
 def process_specific_folders(root_directory, target_types, output_format='jpg', quality=85, overwrite=True):
     for root, dirs, files in os.walk(root_directory):
         if os.path.basename(root) in target_types:
-            # Process direct subdirectories of a matching folder
-            for sub_dir in dirs:
-                specific_folder_path = os.path.join(root, sub_dir)
-                print(f"Processing .tif files in {specific_folder_path} to {output_format.upper()} with quality {quality}")
-                convert_tif(specific_folder_path, output_format=output_format, quality=quality, overwrite=overwrite)
+            start_time = time.time()
 
+            # Process direct subdirectories of a matching folder
+            if os.path.basename(root) != 'layers':
+                for sub_dir in dirs:
+                    specific_folder_path = os.path.join(root, sub_dir)
+                    print(f"Processing .tif files in {specific_folder_path} to {output_format.upper()} with quality {quality}")
+                    convert_tif(specific_folder_path, output_format=output_format, quality=quality, overwrite=overwrite)
+            else:
+                convert_tif(root, output_format=output_format, quality=quality, overwrite=overwrite)
+            end_time = time.time()
+            execution_time = end_time - start_time
+            print(f"Time to complete folder: {execution_time} seconds")
+            
 if __name__ == '__main__':
     root_directory_path = '/path/to/directory'
-    target_types = ['volumes', 'masked_volumes', 'segments']  # Default types to check
+    target_types = ['volumes', 'masked_volumes', 'layers']  # Default types to check
     output_format = 'jpg'  # Default output format
     quality = 85  # Default quality
-    overwrite = False  # Default overwrite
+    overwrite = True  # Default overwrite
 
     if len(sys.argv) > 1:
         root_directory_path = sys.argv[1]
     if len(sys.argv) > 2:
         target_types = [sys.argv[2]]  # Accepts one target type or 'all'
         if target_types[0] == 'all':
-            target_types = ['volumes', 'masked_volumes', 'segments']
+            target_types = ['volumes', 'masked_volumes', 'layers']
     if len(sys.argv) > 3:
         output_format = sys.argv[3]  # 'jpg' or 'png'
     if len(sys.argv) > 4:
@@ -67,4 +75,8 @@ if __name__ == '__main__':
     print(f"Converting .tif files in {root_directory_path} to {output_format.upper()} with quality {quality}")
     print(f"Target data types: {target_types}")
 
+    start_time = time.time()
     process_specific_folders(root_directory_path, target_types, output_format=output_format, quality=quality, overwrite=overwrite)
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Total time to complete: {execution_time} seconds")
