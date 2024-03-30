@@ -5,6 +5,34 @@ from PIL import Image
 from concurrent.futures import ProcessPoolExecutor
 import time
 
+"""
+This file is used to convert .tif files to .jpg or .png files in parallel
+for the Vesuvius Data Download project. It is designed to be run from the
+command line with the following arguments:
+
+1. The root directory to search for .tif files and subfolders
+2. The target data types to convert (volumes, masked_volumes, layers, or all)
+3. The output format (jpg or png)
+4. Whether to overwrite existing files (True or False)
+5. The quality of the output jpg files (0-100)
+
+Example usage:
+python parallel_tif_to_jpg_or_png.py /path/to/directory layers jpg False 85
+
+This will convert all .tif files in the 'layers' subfolders of the 
+path/to/directory to .jpg files with a quality of 85, without overwriting
+
+Using this script without any arguments will default to the following:
+- Root directory: /path/to/directory
+- Target data types: volumes, masked_volumes, layers
+- Output format: jpg
+- Overwrite: False
+- Quality: 85
+
+Thus you could pass only the root directory as an argument, if you like those defaults:
+python parallel_tif_to_jpg_or_png.py /path/to/directory
+"""
+
 def convert_single_tif(file_path, dest_folder, output_format='jpg', quality=85):
     try:
         img_array = tifffile.imread(file_path)
@@ -60,7 +88,7 @@ if __name__ == '__main__':
     target_types = ['volumes', 'masked_volumes', 'layers']  # Default types to check
     output_format = 'jpg'  # Default output format
     quality = 85  # Default quality
-    overwrite = True  # Default overwrite
+    overwrite = False  # Default overwrite
 
     if len(sys.argv) > 1:
         root_directory_path = sys.argv[1]
@@ -71,7 +99,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 3:
         output_format = sys.argv[3]  # 'jpg' or 'png'
     if len(sys.argv) > 4:
-        quality = int(sys.argv[4])
+        overwrite = sys.argv[4].lower() == 'true' # 'True' or 'False' -> default to False
+    if len(sys.argv) > 5:
+        quality = int(sys.argv[5])
     print(f"Converting .tif files in {root_directory_path} to {output_format.upper()} with quality {quality}")
     print(f"Target data types: {target_types}")
 
