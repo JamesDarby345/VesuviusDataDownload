@@ -93,6 +93,11 @@ def convert_tif(source_folder, output_format='jpg', quality=85, overwrite=True, 
 
 def process_specific_folders(root_directory, target_types, output_format='jpg', quality=85, overwrite=True, mod_value=None, output_path=None):
     for root, dirs, files in os.walk(root_directory):
+        # If the current directory ends with '.zarr', skip its subdirectories
+        if root.endswith('.zarr'):
+            dirs[:] = []  # This modifies the list in-place and os.walk() will skip the subdirectories
+            continue
+        
         if os.path.basename(root) in target_types:
             start_time = time.time()
             
@@ -115,7 +120,7 @@ if __name__ == '__main__':
     output_format = 'jpg'  # Default output format
     quality = 85  # Default quality
     overwrite = False  # Default overwrite
-    mod_value = None  # Default mod value
+    mod_value = 5 # Default mod value
     output_path = None  # Default output path
 
     if len(sys.argv) > 1:
