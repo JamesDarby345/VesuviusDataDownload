@@ -25,11 +25,12 @@ This will convert all .tif files in the 'layers' subfolders of the
 path/to/directory to .jpg files with a quality of 85, without overwriting
 
 Using this script without any arguments will default to the following:
-- Root directory: /path/to/directory
-- Target data types: volumes, masked_volumes, layers
+- Root directory: ./ (current directory)
+- Target data types: layers Ex: volumes, masked_volumes, layers or all
 - Output format: jpg
 - Overwrite: False
-- Quality: 85
+- Quality: 95
+- Modulo value: None
 
 Thus you could pass only the root directory as an argument, if you like those defaults:
 python parallel_tif_to_jpg_or_png.py /path/to/directory
@@ -42,7 +43,7 @@ This can be done with pip:
 pip install tifffile Pillow
 """
 
-def convert_single_tif(file_path, dest_folder, output_format='jpg', quality=85, overwrite=True):
+def convert_single_tif(file_path, dest_folder, output_format='jpg', quality=95, overwrite=True):
     try:
         filename = os.path.basename(file_path)
         dest_file_path = os.path.join(dest_folder, f"{os.path.splitext(filename)[0]}.{output_format}")
@@ -94,7 +95,7 @@ def convert_tif(source_folder, output_format='jpg', quality=85, overwrite=True, 
         for future in futures:
             future.result()
 
-def process_specific_folders(root_directory, target_types, output_format='jpg', quality=85, overwrite=True, mod_value=None, output_path=None):
+def process_specific_folders(root_directory, target_types, output_format='jpg', quality=95, overwrite=True, mod_value=None, output_path=None):
     for root, dirs, files in os.walk(root_directory):
         # If the current directory ends with '.zarr', skip its subdirectories
         if root.endswith('.zarr'):
@@ -118,10 +119,10 @@ def process_specific_folders(root_directory, target_types, output_format='jpg', 
             print(f"Time to complete folder: {execution_time} seconds")
             
 if __name__ == '__main__':
-    root_directory_path = '/path/to/directory'
-    target_types = ['volumes', 'masked_volumes', 'layers']  # Default types to check
+    root_directory_path = './'
+    target_types = ['layers']  # Default types to check ['volumes', 'masked_volumes', 'layers']
     output_format = 'jpg'  # Default output format
-    quality = 85  # Default quality
+    quality = 95  # Default quality
     overwrite = False  # Default overwrite
     mod_value = None # Default mod value
     output_path = None  # Default output path

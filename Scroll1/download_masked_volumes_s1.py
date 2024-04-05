@@ -29,17 +29,18 @@ def get_valid_range(s, e, scrollZAxis):
     return start, end
 
 #faster to download individual files like this if there are only a few
-def download_range_or_file(start, end, base_url, target_dir, username, password, threads):
+def download_range_or_file(start, end, base_url, target_dir, username, password, threads, file_format):
     if start == end:
-        filename = f"{start:05}.tif"
+        filename = f"{start:05}.{file_format}"
         print(f"Downloading {filename}...")
+        print(f":http:{base_url}{filename}")
         subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                 "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                 f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
     else:
         for i in range(start, end + 1):
-            filename = f"{i:05}.tif"
+            filename = f"{i:05}.{file_format}"
             subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
                             "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
@@ -69,23 +70,37 @@ def main():
     password = get_env_variable("PASSWORD", "password? ")
 
     scrollZAxis = 14375
+    scrollName = "Scroll1"
+    scrollNum = "1"
+    scanId = "20230205180739"
 
     range_input = input("Specify a range of masked .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
+    # jpg_input = input("Download .tif masked volumes or .jpg masked volumes? default .tif (tif, jpg): ")
+    jpg_input = "tif" #CHANGE if scroll 1 masked .jpg files are created
 
-    if range_input != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
+    if range_input.strip().lower() != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
         print(f"Unexpected format: {range_input}")
         print(f"Please use 'all' or the format [start-end,start-end,number] with valid scroll1 .tif volume numbers (0-{scrollZAxis})")
         return
 
-    base_url = "/full-scrolls/Scroll1.volpkg/volumes_masked/20230205180739/"
-    target_dir = "./masked_volumes/20230205180739/"
+    base_url = f"/full-scrolls/{scrollName}.volpkg/volumes_masked/{scanId}"
+    target_dir = f"./volumes_masked/{scanId}"
+    file_format = "tif"
+
+    if jpg_input.strip().lower() == "jpg":
+        base_url = base_url + "_jpg"
+        target_dir = target_dir + "_jpg"
+        file_format = "jpg"
+
+    base_url = base_url + "/"
+    print(f"Downloading from {base_url} to {target_dir}")
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
     # to prevent unnecessary switching overhead
     threads = 8
 
-    if range_input == "all":
+    if range_input.strip().lower() == "all":
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                         "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
@@ -100,23 +115,23 @@ def main():
             #checks for invalid range numbers that bypass regex, but doesnt stop the download
             if start > scrollZAxis or end > scrollZAxis or start < 0 or end < 0:
                 print(f"Invalid range: {start}-{end}")
-                print("Please use valid scroll 1 .tif volume numbers (0-14375)")
+                print(f"Please use valid scroll {scrollNum} .{file_format} volume numbers (0-{scrollZAxis})")
                 start, end = get_valid_range(start, end, scrollZAxis)
                 print(f"Using valid range: {start}-{end}")
             start_end_list.append((start, end))
             if start == end:
-                filename = f"{start:05}.tif"
+                filename = f"{start:05}.{file_format}"
                 file_list.append(filename)
             elif start < end:
                 for i in range(start, end + 1):
-                    filename = f"{i:05}.tif"
+                    filename = f"{i:05}.{file_format}"
                     file_list.append(filename)
         
         # If the number of files to download is less than some threashold, default 100,
         # download each file individually to avoid the --files-from overhead
         if(len(file_list) < 100):
             for start, end in start_end_list:
-                download_range_or_file(start, end, base_url, target_dir, username, password, threads)
+                download_range_or_file(start, end, base_url, target_dir, username, password, threads, file_format)
         else:
             download_range(base_url, target_dir, file_list, username, password, threads)
 

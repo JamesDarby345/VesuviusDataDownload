@@ -69,14 +69,13 @@ def main():
     username = get_env_variable("USERNAME", "username? ")
     password = get_env_variable("PASSWORD", "password? ")
 
-    scrollZAxis = 14427
-    scrollName = "Scroll2"
-    scrollNum = "2"
-    scanId = "20230210143520"
+    scrollZAxis = 26390 #number of tif volumes in the scroll or 'Z axis' of the scroll
+    scrollName = "PHerc1667"
+    scrollNum = "4"
+    scanId = "20231107190228" #default to canonical scanId
 
     range_input = input("Specify a range of masked .tifs volumes to download, or all (Ex: [0-1000,3000,4000-5000] or all): ")
-    # jpg_input = input("Download .tif masked volumes or .jpg masked volumes? default .tif (tif, jpg): ")
-    jpg_input = "tif" #CHANGE if scroll 2 masked .jpg files are created
+    jpg_input = input("Download .tif masked volumes or .jpg masked volumes? default .tif (tif, jpg): ")
 
     if range_input.strip().lower() != "all" and not re.match(r'^(\[[0-9]{1,5}(-[0-9]{1,5})?(,[0-9]{1,5}(-[0-9]{1,5})?)*\])$', range_input):
         print(f"Unexpected format: {range_input}")
@@ -84,6 +83,8 @@ def main():
         return
 
     base_url = f"/full-scrolls/{scrollName}.volpkg/volumes_masked/{scanId}"
+    temp_base_url = f"/community-uploads/james-darby/PHerc1667/volumes_masked/20231107190228"
+    base_url = temp_base_url
     target_dir = f"./volumes_masked/{scanId}"
     file_format = "tif"
 

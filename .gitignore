@@ -7,6 +7,7 @@ config.json
 **/volume_grids/
 **/segments/
 **/volumes/
+**/volumes_masked/
 **/masked_volumes/
 **/surface_volume/
 **/fragment_data/
@@ -25,5 +26,8 @@ config.json
 !**/Fragment5/*.py
 **/Fragment6
 !**/Fragment6/*.py
+**/Scroll1.zarr/
+**/Scroll2.zarr/
 test/
 test_0999/
+
