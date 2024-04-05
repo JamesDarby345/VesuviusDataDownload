@@ -13,9 +13,9 @@ If save as jpg is true, it will save the masked volumes as jpg files with 95% qu
 The code will overwrite the files if they already exist.
 """
 
-unapplied_masks_path = "/Volumes/16TB_slow_RAID_0/Scroll4/volume_masks"
-original_volume_path = "/Volumes/16TB_RAID_0/Scroll4/PHerc1667.volpkg/volumes/20231107190228"
-output_path = "/Volumes/16TB_slow_RAID_0/Scroll4/volume_masks_applied"
+unapplied_masks_path = "http://dl.ash2txt.org/community-uploads/james-darby/PHerc0332/volumes_masked/20231027191953_unapplied_masks/"
+original_volume_path = "http://dl.ash2txt.org/full-scrolls/PHerc0332.volpkg/volumes/20231027191953/"
+output_path = "http://dl.ash2txt.org/community-uploads/james-darby/PHerc0332/volumes_masked/20231027191953/"
 save_as_tif = True
 save_as_jpg = True
 
@@ -56,4 +56,3 @@ for unapplied_mask in unapplied_masks:
     count += 1
     if count % 100 == 0:
         print(f"Processed {count} masks")
-        break
