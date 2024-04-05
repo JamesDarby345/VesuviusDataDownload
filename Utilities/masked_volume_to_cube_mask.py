@@ -9,9 +9,9 @@ import tifffile
 import csv
 
 
-scrollZAxis = 14427 #Scroll length/number of volumes/scroll Z axis
+scrollZAxis = 26390 #Scroll length/number of volumes/scroll Z axis
 
-masked_volume_path = '/Volumes/Corsair_8TB/Scroll2/masked_volumes/20230210143520'
+masked_volume_path = '/Volumes/16TB_slow_RAID_0/Scroll4/masked_volumes/'
 cube_size = 500 #standard Vesuvius challenge cube size
 step = 100 #number of volumes to skip
 file_nums = [i for i in range(0, scrollZAxis, step)] #every nth (step) volume to sample
@@ -46,6 +46,8 @@ for i in range(0, len(file_list), volumes_per_cube):
     volume = tifffile.imread(f"{masked_volume_path}/{file_list[i]}")  # Read the volume from the masked volume directory
     volume = np.moveaxis(volume, 0, -1)  # Move the axis to the end, so that the shape is (x, y)
     for j in range(1, volumes_per_cube):
+        if i+j >= len(file_list):
+            break
         volume = np.dstack((volume, np.moveaxis(tifffile.imread(f"{masked_volume_path}/{file_list[i+j]}"), 0, -1)))  # Stack the volumes along the z-axis
     for x in range(0, volume.shape[0], cube_size):
         for y in range(0, volume.shape[1], cube_size):

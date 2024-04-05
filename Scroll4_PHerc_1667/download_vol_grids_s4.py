@@ -48,8 +48,7 @@ def main():
     base_url = "/full-scrolls/PHerc1667.volpkg/volume_grids/20231107190228/"
     target_dir = "./volume_grids/20231107190228/"
 
-    #If mask.csv file is produced, put relative path here ex: mask_csv_file = "../Volume_Cube_Masks/mask_name.csv"
-    mask_csv_file = ""
+    mask_csv_file = "../Volume_Cube_Masks/Scroll4_full_scroll_cube_mask.csv"
 
     # Number of threads to use for downloading, 
     # ideally enough to saturate the network but not more
