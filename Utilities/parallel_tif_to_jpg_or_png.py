@@ -18,7 +18,6 @@ command line with the following arguments:
 6. Optional: Modulo value to filter files based on the filename eg. 5
 to only process files where the filename is divisible by 5
 
-
 Example usage:
 python parallel_tif_to_jpg_or_png.py /path/to/directory layers jpg False 85
 
@@ -37,6 +36,10 @@ python parallel_tif_to_jpg_or_png.py /path/to/directory
 or alternatively edit the default values in the script itself.
 This includes editting the output path to save the converted files to a different location
 than beside the original .tif files.
+
+Note: This script requires the tifffile and Pillow libraries to be installed.
+This can be done with pip: 
+pip install tifffile Pillow
 """
 
 def convert_single_tif(file_path, dest_folder, output_format='jpg', quality=85, overwrite=True):
@@ -120,7 +123,7 @@ if __name__ == '__main__':
     output_format = 'jpg'  # Default output format
     quality = 85  # Default quality
     overwrite = False  # Default overwrite
-    mod_value = 5 # Default mod value
+    mod_value = None # Default mod value
     output_path = None  # Default output path
 
     if len(sys.argv) > 1:
