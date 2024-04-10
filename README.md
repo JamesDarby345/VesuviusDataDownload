@@ -105,7 +105,10 @@ You can download and install rclone using the script provided by the rclone team
 ```
 curl https://rclone.org/install.sh | sudo bash
 ```
-
+if you dont have curl installed use the following command to install it
+```
+sudo apt update && sudo apt install curl
+```
 **Verify Installation:**
 Once the script completes, open a new terminal and verify the installation by typing:
 ```rclone --version```
