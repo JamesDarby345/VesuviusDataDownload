@@ -33,10 +33,10 @@ def main():
     filename = f"Scroll{scrollNum}.zarr"
 
     print(f"Downloading {filename}...")
-    print(f":http:{base_url}{filename}")
+    print(f":https:{base_url}{filename}")
 
-    subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
-                "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+    subprocess.run(["rclone", "copy", f":https:{base_url}{filename}", f"{target_dir}",
+                "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                 f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     
 if __name__ == "__main__":

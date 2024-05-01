@@ -33,16 +33,16 @@ def download_range_or_file(start, end, base_url, target_dir, username, password,
     if start == end:
         filename = f"{start:05}.{file_format}"
         print(f"Downloading {filename}...")
-        print(f":http:{base_url}{filename}")
-        subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
-                "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+        print(f":https:{base_url}{filename}")
+        subprocess.run(["rclone", "copy", f":https:{base_url}{filename}", f"{target_dir}",
+                "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                 f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
     else:
         for i in range(start, end + 1):
             filename = f"{i:05}.{file_format}"
-            subprocess.run(["rclone", "copy", f":http:{base_url}{filename}", f"{target_dir}",
-                            "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+            subprocess.run(["rclone", "copy", f":https:{base_url}{filename}", f"{target_dir}",
+                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
 # uses --files-from flag to download a list of files, 
@@ -57,8 +57,8 @@ def download_range(remote_path, target_dir, file_list, username, password, threa
     # Use the temporary file with the --files-from option in rclone
     # to leverage multi threaded downloads and better reporting than individual file downloads
     try:
-        subprocess.run(["rclone", "copy", f":http:{remote_path}", f"{target_dir}",
-                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", 
+        subprocess.run(["rclone", "copy", f":https:{remote_path}", f"{target_dir}",
+                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", 
                         "--files-from", temp_file_path, "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     finally:
@@ -102,8 +102,8 @@ def main():
     threads = 8
 
     if range_input.strip().lower() == "all":
-        subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+        subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
+                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     else:
         ranges = re.findall(r'([0-9]+)-?([0-9]*)', range_input.strip('[]'))
