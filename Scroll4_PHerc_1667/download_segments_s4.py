@@ -101,7 +101,7 @@ def main():
     # to prevent unnecessary switching overhead
     threads = 8
 
-    data_selection = input("Would you like to download just the layers (default), or also the .obj file, or all the segment files? (layers/obj/all): ")
+    data_selection = input("Would you like to download just the layers (default), or the .obj files, or all the segment files? (layers/obj/all): ")
     
     csv_file_path = "./segments_to_download_s4.csv"
     specified_segments = read_csv_to_array(csv_file_path)
@@ -120,7 +120,7 @@ def main():
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                             "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
-                            "--include", "**/layers/**", "--include","**/*.obj","--exclude", "**/*_points.obj"], check=True)
+                             "--include","**/*.obj","--exclude", "**/*_points.obj"], check=True)
         else:
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
                             "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
