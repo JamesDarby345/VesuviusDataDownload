@@ -28,16 +28,16 @@ def download_files_from_list(file_list, local_path, username, password, remote_p
 
     try:
         # Use the temporary file with the --files-from option in rclone
-        subprocess.run(["rclone", "copy", f":https:{remote_path}", f"{local_path}",
-                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/",
+        subprocess.run(["rclone", "copy", f":http:{remote_path}", f"{local_path}",
+                        "--http-url", f"https://{username}:{password}@dl.ash2txt.org/",
                         "--files-from", temp_file_path, "--progress", 
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     finally:
         os.remove(temp_file_path)  # Clean up the temporary file
 
 def download_file(remote_path, local_path, username, password, threads):
-    subprocess.run(["rclone", "copy", f":https:{remote_path}", f"{local_path}",
-                    "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+    subprocess.run(["rclone", "copy", f":http:{remote_path}", f"{local_path}",
+                    "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                     f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 
 def main():

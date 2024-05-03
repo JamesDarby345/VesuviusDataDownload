@@ -11,14 +11,14 @@ def generate_layers_file_list(dir_ids, base_remote_path, username, password, typ
             # command = f"rclone lsf {remote_name}:{base_remote_path}{dir_id}/layers --recursive"
             file_paths = ""
             if type == "all":
-                file_paths = subprocess.check_output(["rclone", "lsf", f":https:{base_remote_path}{dir_id}",
-                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
+                file_paths = subprocess.check_output(["rclone", "lsf", f":http:{base_remote_path}{dir_id}",
+                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
 
             if type == "obj":
                 file_paths = f"{dir_id}.obj"
               
-            layer_paths = subprocess.check_output(["rclone", "lsf", f":https:{base_remote_path}{dir_id}/layers",
-                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
+            layer_paths = subprocess.check_output(["rclone", "lsf", f":http:{base_remote_path}{dir_id}/layers",
+                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
 
             for layer_path in layer_paths.strip().split('\n'):
                 # Check if the file_path is not empty
@@ -47,8 +47,8 @@ def download_from_file_list(base_url, target_dir, file_list, username, password,
     # Use the temporary file with the --files-from option in rclone
     # to leverage multi threaded downloads and better reporting than individual file downloads
     try:
-        subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
-                    "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", 
+        subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
+                    "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", 
                     "--files-from", temp_file_path, "--progress",
                     f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     finally:
@@ -113,17 +113,17 @@ def main():
 
     if segments_to_download.strip().lower() == "all":
         if data_selection.strip().lower() == "all":
-            subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
-                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+            subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
+                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         elif data_selection.strip().lower() == "obj":
-            subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
-                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+            subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
+                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
                             "--filter", "+ **/layers/**", "--filter","+ **/*.obj","--filter", "- **/*_points.obj"], check=True)
         else:
-            subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
-                            "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+            subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
+                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
                             "--include", "**/layers/**"], check=True)
     else:

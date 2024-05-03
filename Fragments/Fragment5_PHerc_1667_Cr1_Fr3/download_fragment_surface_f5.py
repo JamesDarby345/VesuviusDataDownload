@@ -33,18 +33,18 @@ def main():
     data_selection = input("would you like to download the final outputs, or all the fragment surface files? default to final outputs (all/final): ")
 
     if data_selection == "all":
-        subprocess.run(["rclone", "copy", f":https:{base_url}", f"{target_dir}",
-                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+        subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
+                        "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     else:
-        subprocess.run(["rclone", "copy", f":https:{base_url}/surface_volume", f"{target_dir}surface_volume",
-                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+        subprocess.run(["rclone", "copy", f":http:{base_url}/surface_volume", f"{target_dir}surface_volume",
+                        "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
         additonal_files = ["ir.png","inklabels.png","result.tif","mask.png"]
         for file in additonal_files:
-            subprocess.run(["rclone", "copy", f":https:{base_url}/{file}", f"{target_dir}",
-                        "--https-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+            subprocess.run(["rclone", "copy", f":http:{base_url}/{file}", f"{target_dir}",
+                        "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
 
