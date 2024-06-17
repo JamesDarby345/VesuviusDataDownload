@@ -3,6 +3,8 @@
 <img width=300 alt="Vesuvius data download repo icon" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/dfa44677-f063-436d-88b4-e92bb8891848>
 </p> 
 
+# Due to path changes on the download server, the repo may not work as intended at the moment
+
 The purpose of this repo is to remove as much of the friction and increase the clarity of, what the Vesuvius Data is, what data you want for your use case, and how to download it, as possible.
 
 It has three major parts.
