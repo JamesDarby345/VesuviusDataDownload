@@ -11,7 +11,7 @@ def main():
     base_url = f"/full-scrolls/{scrollName}/{scrollVolpkg}"
     temp_base_url = f"/community-uploads/james/{scrollName}/"
     base_url = temp_base_url
-    target_dir = f"./{scrollName}.zarr/"
+    target_dir = f"./{scrollName}_8um.zarr/"
     threads = 8
     filename = f"{scrollName}_8um.zarr"
 

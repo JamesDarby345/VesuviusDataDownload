@@ -81,7 +81,7 @@ def main():
     threads = 8
 
     # Download the config.json file and set target_dir to be a .volpkg directory for VC compatibility
-    subprocess.run(["rclone", "copy", f":https:/full-scrolls/{scrollName}.volpkg/config.json", f"{target_prefix}/{scrollName}.volpkg/",
+    subprocess.run(["rclone", "copy", f":https:/full-scrolls/{scrollName}/{scrollVolpkg}/config.json", f"{target_prefix}/{scrollVolpkg}/",
                     "--http-url", f"https://dl.ash2txt.org/", "--progress",
                 f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
 

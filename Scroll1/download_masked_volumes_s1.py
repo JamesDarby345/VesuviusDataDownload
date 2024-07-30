@@ -36,7 +36,7 @@ def download_range_or_file(start, end, base_url, target_dir, threads, file_forma
 
 # uses --files-from flag to download a list of files, 
 # faster & better reporting than many individual file downloads <- unsure exactly where the threshold is
-def download_range(remote_path, target_dir, file_list, username, password, threads):
+def download_range(remote_path, target_dir, file_list, threads):
     # Create a temporary file to list the files to download
     with NamedTemporaryFile(mode='w', delete=False) as temp_file:
         for file in file_list:
@@ -47,7 +47,7 @@ def download_range(remote_path, target_dir, file_list, username, password, threa
     # to leverage multi threaded downloads and better reporting than individual file downloads
     try:
         subprocess.run(["rclone", "copy", f":http:{remote_path}", f"{target_dir}",
-                        "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", 
+                        "--http-url", f"https://dl.ash2txt.org/", 
                         "--files-from", temp_file_path, "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     finally:

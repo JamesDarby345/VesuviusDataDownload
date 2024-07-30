@@ -40,7 +40,7 @@ def generate_layers_file_list(dir_ids, base_remote_path, type="layers"):
             print(f"Error listing files in {dir_id}/layers: {e}")
     return file_list
 
-def download_from_file_list(base_url, target_dir, file_list, username, password, threads):
+def download_from_file_list(base_url, target_dir, file_list, threads):
     # Create a temporary file to list the files to download
     with NamedTemporaryFile(mode='w', delete=False) as temp_file:
         for file in file_list:

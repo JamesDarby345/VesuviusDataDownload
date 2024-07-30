@@ -13,9 +13,9 @@ If save as jpg is true, it will save the masked volumes as jpg files with 95% qu
 The code will overwrite the files if they already exist.
 """
 
-unapplied_masks_path = "https://dl.ash2txt.org/community-uploads/james-darby/PHerc0332/volumes_masked/20231027191953_unapplied_masks/"
-original_volume_path = "https://dl.ash2txt.org/full-scrolls/PHerc0332.volpkg/volumes/20231027191953/"
-output_path = "https://dl.ash2txt.org/community-uploads/james-darby/PHerc0332/volumes_masked/20231027191953/"
+unapplied_masks_path = "https://dl.ash2txt.org/community-uploads/james/PHerc0332/volumes_masked/20231027191953_unapplied_masks/"
+original_volume_path = "https://dl.ash2txt.org/full-scrolls/Scroll3/PHerc332.volpkg/volumes/20231027191953/"
+output_path = "https://dl.ash2txt.org/community-uploads/james/PHerc0332/volumes_masked/20231027191953/"
 save_as_tif = True
 save_as_jpg = True
 
