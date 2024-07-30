@@ -173,7 +173,7 @@ If your download stops halfway, you can simply re-run it as rclone will not redo
 
 The typical rclone command pattern is:
 
-rclone copy "url in the server, _Note 1_" "local directory path to download to, _Note 2_" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
+rclone copy "url in the server, _Note 1_" "local directory path to download to, _Note 2_" --http-url "https://dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
 
 The design is to whenever reasonable take all the files the user wants, and combine them into one rclone command. This is so rclone can handle the parallelism, as well as provide total size, download rate and eta information which is useful for the user, so they know about how it will take, and if they need to scale back their download due to space constraints etc. This does cause an around ~1 min delay as rclone 'starts up' so for smaller downloads I just use multiple sequential rclone commands. rclone appears to download small amounts of data faster this way without the --file-from flag startup cost, though this is untested. The feedback is faster anyway so it is a better user experience.
 
