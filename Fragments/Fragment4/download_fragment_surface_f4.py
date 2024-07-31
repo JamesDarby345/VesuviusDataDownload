@@ -1,28 +1,12 @@
-import os
 import subprocess
+
 
 def strip_quotes(value):
     return value.replace("'", "").replace('"', "")
 
-def load_env_variables():
-    # Attempt to load environment variables from a .env file
-    with open("../../config.env", "r") as file:
-        for line in file:
-            key, value = line.strip().split("=", 1)
-            os.environ[key] = strip_quotes(value)
-
-def get_env_variable(name, prompt):
-    value = os.getenv(name)
-    if not value:
-        value = input(prompt)
-    return value
 
 def main():
-    load_env_variables()
-    username = get_env_variable("USERNAME", "username? ")
-    password = get_env_variable("PASSWORD", "password? ")
-
-    base_url = "/fragments/Frag4.volpkg/working/54keV_exposed_surface"
+    base_url = "/fragments/Frag4/PHercParis1Fr39.volpkg/working/54keV_exposed_surface"
     target_dir = "./"
 
     # Number of threads to use for downloading, 
@@ -34,19 +18,18 @@ def main():
 
     if data_selection == "all":
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+                        "--http-url", f"https://dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     else:
         subprocess.run(["rclone", "copy", f":http:{base_url}/PHercParis1Fr39_54keV_surface_volume", f"{target_dir}surface_volume",
-                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+                        "--http-url", f"https://dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         
-        additonal_files = ["extras/PHercParis1Fr39_54keV_ir.png","PHercParis1Fr39_54keV_inklabels.png","extras/PHercParis1Fr39_54keV.tif","PHercParis1Fr39_54keV_mask.png"]
-        for file in additonal_files:
+        additional_files = ["extras/PHercParis1Fr39_54keV_ir.png","PHercParis1Fr39_54keV_inklabels.png","extras/PHercParis1Fr39_54keV.tif","PHercParis1Fr39_54keV_mask.png"]
+        for file in additional_files:
             subprocess.run(["rclone", "copy", f":http:{base_url}/{file}", f"{target_dir}",
-                        "--http-url", f"http://{username}:{password}@dl.ash2txt.org/", "--progress",
+                        "--http-url", f"https://dl.ash2txt.org/", "--progress",
                         f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
-        
 
 
 if __name__ == "__main__":

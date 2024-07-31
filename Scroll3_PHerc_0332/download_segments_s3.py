@@ -3,7 +3,7 @@ import subprocess
 import csv
 from tempfile import NamedTemporaryFile
 
-def generate_layers_file_list(dir_ids, base_remote_path, username, password, type="layers"):
+def generate_layers_file_list(dir_ids, base_remote_path, type="layers"):
     file_list = []
     for dir_id in dir_ids:
         try:
@@ -12,13 +12,13 @@ def generate_layers_file_list(dir_ids, base_remote_path, username, password, typ
             file_paths = ""
             if type == "all":
                 file_paths = subprocess.check_output(["rclone", "lsf", f":http:{base_remote_path}{dir_id}",
-                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
+                            "--http-url", f"https://dl.ash2txt.org/","--recursive"],text=True)
 
             if type == "obj":
                 file_paths = f"{dir_id}.obj"
               
             layer_paths = subprocess.check_output(["rclone", "lsf", f":http:{base_remote_path}{dir_id}/layers",
-                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/","--recursive"],text=True)
+                            "--http-url", f"https://dl.ash2txt.org/","--recursive"],text=True)
 
             for layer_path in layer_paths.strip().split('\n'):
                 # Check if the file_path is not empty
@@ -37,7 +37,7 @@ def generate_layers_file_list(dir_ids, base_remote_path, username, password, typ
             print(f"Error listing files in {dir_id}/layers: {e}")
     return file_list
 
-def download_from_file_list(base_url, target_dir, file_list, username, password, threads):
+def download_from_file_list(base_url, target_dir, file_list, threads):
     # Create a temporary file to list the files to download
     with NamedTemporaryFile(mode='w', delete=False) as temp_file:
         for file in file_list:
@@ -48,7 +48,7 @@ def download_from_file_list(base_url, target_dir, file_list, username, password,
     # to leverage multi threaded downloads and better reporting than individual file downloads
     try:
         subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                    "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", 
+                    "--http-url", f"https://dl.ash2txt.org/", 
                     "--files-from", temp_file_path, "--progress",
                     f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
     finally:
@@ -75,25 +75,8 @@ def comma_separated_string_to_array(s):
 def strip_quotes(value):
     return value.replace("'", "").replace('"', "")
 
-def load_env_variables():
-    # Attempt to load environment variables from a .env file
-    with open("../config.env", "r") as file:
-        for line in file:
-            key, value = line.strip().split("=", 1)
-            os.environ[key] = strip_quotes(value)
-
-def get_env_variable(name, prompt):
-    value = os.getenv(name)
-    if not value:
-        value = input(prompt)
-    return value
-
 def main():
-    load_env_variables()
-    username = get_env_variable("USERNAME", "username? ")
-    password = get_env_variable("PASSWORD", "password? ")
-
-    base_url = "/full-scrolls/PHerc0332.volpkg/paths/"
+    base_url = "/full-scrolls/Scroll3/PHerc332.volpkg/paths/"
     target_dir = "./segments"
 
     # Number of threads to use for downloading, 
@@ -107,23 +90,23 @@ def main():
     specified_segments = read_csv_to_array(csv_file_path)
     
     if specified_segments == []:
-        segments_to_download = input("\nEnter segment id's to download in a comma seperated format\nEx: 20231030220150,20231031231220 or all for all segments\nfrom this scroll. You can also specify them\nin the neighbouring segments_to_download_s3.csv file (all/id's): ")
+        segments_to_download = input("\nEnter segment id's to download in a comma separated format\nEx: 20231030220150,20231031231220 or all for all segments\nfrom this scroll. You can also specify them\nin the neighboring segments_to_download_s3.csv file (all/id's): ")
     else: 
         segments_to_download = "csv_passed_in_segment_ids"
 
     if segments_to_download.strip().lower() == "all":
         if data_selection.strip().lower() == "all":
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+                            "--http-url", f"https://dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}"], check=True)
         elif data_selection.strip().lower() == "obj":
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+                            "--http-url", f"https://dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
                              "--include","**/*.obj","--exclude", "**/*_points.obj"], check=True)
         else:
             subprocess.run(["rclone", "copy", f":http:{base_url}", f"{target_dir}",
-                            "--http-url", f"https://{username}:{password}@dl.ash2txt.org/", "--progress",
+                            "--http-url", f"https://dl.ash2txt.org/", "--progress",
                             f"--multi-thread-streams={threads}", f"--transfers={threads}", 
                             "--include", "**/layers/**"], check=True)
     else:
@@ -131,8 +114,8 @@ def main():
             specified_segments = comma_separated_string_to_array(segments_to_download)
 
 
-        file_list = generate_layers_file_list(specified_segments, base_url, username, password, data_selection.strip().lower())
-        download_from_file_list(base_url, target_dir, file_list, username, password, threads)
+        file_list = generate_layers_file_list(specified_segments, base_url, data_selection.strip().lower())
+        download_from_file_list(base_url, target_dir, file_list, threads)
 
 
 if __name__ == "__main__":

@@ -3,8 +3,6 @@
 <img width=300 alt="Vesuvius data download repo icon" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/dfa44677-f063-436d-88b4-e92bb8891848>
 </p> 
 
-## Due to path changes on the download server, the repo may not work as intended at the moment
-
 The purpose of this repo is to remove as much of the friction and increase the clarity of, what the Vesuvius Data is, what data you want for your use case, and how to download it, as possible.
 
 It has three major parts.
@@ -31,7 +29,7 @@ Do you think anything is missing? Anything unclear? Let me know with a github is
 1. I assume some fundamental knowledge of how to navigate into directories with a terminal, have git and python installed (to clone the repo and run the files) & how to run python files from the command line (cd to the directory, and type python file_name.py). 
 There are many great tutorial on this, [All OS Python install](https://kinsta.com/knowledgebase/install-python/), [All OS Git install](https://github.com/git-guides/install-git), [Command line basics](https://tutorials.codebar.io/command-line/introduction/tutorial.html) (you only need to know how to use cd for this repo),  and if you ever get stuck on this, or anything else in this repo, or challenge, we live in a post [chatGPT](https://chat.openai.com/) world, and these three things are well within its capabilities to explain, so ask it to help! Asking clear questions with as much context as is reasonable helps to get better responses back.
 
-2. Before proceeding, you must agree to the [data license](https://docs.google.com/forms/d/e/1FAIpQLSf2lCOCwnO1xo0bc1QdlL0a034Uoe7zyjYBY2k33ZHslHE38Q/viewform) to be provided the username and password for the data server. This login is required to use the download scripts in this repo.
+2. Before using the dataset, you must agree to the [data license](https://docs.google.com/forms/d/e/1FAIpQLSf2lCOCwnO1xo0bc1QdlL0a034Uoe7zyjYBY2k33ZHslHE38Q/viewform).
 
 ## Installation Instructions
 1. Navigate into the directory you would like to have this repo, and thus your data, in. Then run the following command to clone the repo to your local computer
@@ -134,9 +132,7 @@ Use the [data reference wiki](https://github.com/JamesDarby345/VesuviusDataDownl
 
 Each file type works a little bit differently, but simply navigating into the folder and running the file with python file_name.py will cause the script to prompt you for the minimal information it needs and will then begin to download. Just doing this should be enough to get you started.
 
-You will notice that each file will prompt you for a username and password, this is to login to the dl.ash2txt.org server, and are the same ones you receive after accepting the data agreement. If like me you quickly get annoyed by putting in the username and password, you can edit (or create if its not there) the ```config.env``` file which is in the top level of the repo, and put the username and password in there and the scripts will use that instead of prompting you. Be careful to not accidentally release the username and password to those who have not agreed to the data license, especially if you contribute to this repo. 
-
-You may also notice that the scripts will load without showing progress for ~1-2 minutes for larger download requests. This is expected as rclone is 'warming up' to download a large number of files efficiently, synchronizing with what you may already have, and will be able to provide download rate, the total download size and approximate ETA reporting once done. Below is what to expect the output to look like when starting the command, and after a few minutes for the larger downloads. 
+You may notice that the scripts will load without showing progress for ~1-2 minutes for larger download requests. This is expected as rclone is 'warming up' to download a large number of files efficiently, synchronizing with what you may already have, and will be able to provide download rate, the total download size and approximate ETA reporting once done. Below is what to expect the output to look like when starting the command, and after a few minutes for the larger downloads. 
 
 Output on startup<br>
 <img width=600 alt="rclone starting" src=https://github.com/JamesDarby345/VesuviusDataDownload/assets/49734270/1e6fc52b-5867-49b3-8e53-843a017c78fc><br><br>
@@ -173,7 +169,7 @@ If your download stops halfway, you can simply re-run it as rclone will not redo
 
 The typical rclone command pattern is:
 
-rclone copy "url in the server, _Note 1_" "local directory path to download to, _Note 2_" --http-url "http://${USERNAME}:${PASSWORD}@dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
+rclone copy "url in the server, _Note 1_" "local directory path to download to, _Note 2_" --http-url "https://dl.ash2txt.org/" --progress --multi-thread-streams=8 --transfers=8
 
 The design is to whenever reasonable take all the files the user wants, and combine them into one rclone command. This is so rclone can handle the parallelism, as well as provide total size, download rate and eta information which is useful for the user, so they know about how it will take, and if they need to scale back their download due to space constraints etc. This does cause an around ~1 min delay as rclone 'starts up' so for smaller downloads I just use multiple sequential rclone commands. rclone appears to download small amounts of data faster this way without the --file-from flag startup cost, though this is untested. The feedback is faster anyway so it is a better user experience.
 
