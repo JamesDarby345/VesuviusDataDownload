@@ -54,6 +54,10 @@ def main():
         with open(gp_mask_csv_file, newline='') as csvfile:
             reader = csv.reader(csvfile)
             next(reader)
+
+            for jy, jx, jz in reader:
+                        filename = f"cell_yxz_{int(jy):03d}_{int(jx):03d}_{int(jz):03d}.tif"
+                        files.append(filename)
     else:
         files = []
 
